@@ -1,0 +1,119 @@
+<app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a porder"></app-no-privilege>
+<app-object-not-found *ngIf="loaded && !porder" message="Porder Not Found"></app-object-not-found>
+<app-loading *ngIf="!loaded"></app-loading>
+<div *ngIf="porder && privilege.showOne">
+  <app-page-header
+    title="Purchase Order Detail Page of {{ this.porder.code }}"
+    [breadcrumbSegments]="['Purchase Orders', 'Show All Purchase Orders', 'Details of ' + this.porder.code]"
+  ></app-page-header>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-card class="example-card">
+        <mat-card-content style="min-height: 400px">
+          <table class="w-100 table-striped custom-data-table">
+            <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{porder.code}}</td>
+            </tr>
+            <tr>
+              <th>Created Date</th>
+              <td>{{porder.tocreation | date}}</td>
+            </tr>
+            <tr>
+              <th>Created Time</th>
+              <td>{{porder.tocreation | date: 'shortTime': '+0530'}}</td>
+            </tr>
+            <tr>
+              <th>Creator</th>
+              <td>{{porder.creator.id}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-md-8">
+      <mat-card >
+        <mat-card-content style="min-height: 400px">
+
+          <mat-tab-group>
+            <mat-tab label="Purchase Order">
+
+              <mat-card class="example-card">
+                <mat-card-content>
+
+          <table class="w-100 table-striped custom-data-table">
+            <tbody>
+
+            <tr>
+              <th>Branch</th>
+              <td>{{porder.branch.name}}</td>
+            </tr>
+                     <tr>
+              <th>Supplier</th>
+              <td>{{porder.supplier.name}}</td>
+            </tr>
+            <tr>
+              <th>Date of Ordered</th>
+              <td [innerHTML]="porder.doordered | date"></td>
+            </tr>
+            <tr>
+              <th>Date of Required</th>
+              <td [innerHTML]="porder.dorequired | date"></td>
+            </tr>
+
+            <tr>
+              <th>Date of Accepted</th>
+              <td [innerHTML]="porder.dorecieved | date"></td>
+            </tr>
+
+            <tr *ngIf="porder.description">
+              <th>Description</th>
+              <td [innerHTML]="porder.description | nl2br"></td>
+            </tr>
+            <tr>
+              <th>Porder Status</th>
+              <td>{{porder.porderstatus.name}}</td>
+            </tr>
+            </tbody>
+          </table>
+                </mat-card-content>
+              </mat-card>
+            </mat-tab>
+
+            <mat-tab label="Item List">
+
+              <mat-card class="example-card">
+                <mat-card-content>
+
+                  <table class="w-100 table-striped custom-data-table">
+                    <tr>
+                      <th>Item Name</th>
+                      <th>Quantity</th>
+                    </tr>
+                    <tbody>
+                    <tr *ngFor="let porderitem of porder.porderitemList">
+                      <td>{{porderitem.item.name}}</td>
+                      <td>{{porderitem.qty}}</td>
+
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </mat-card-content>
+              </mat-card>
+            </mat-tab>
+
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="d-flex mt-5">
+    <span class="spacer"></span>
+    <button *ngIf="privilege.showAll" routerLink="/porders" class="mr-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Purchase Orders</button>
+    <button *ngIf="privilege.update" routerLink="/porders/edit/{{porder.id}}" mat-raised-button color="accent"><mat-icon>edit</mat-icon> Update</button>
+    <button *ngIf="privilege.delete" (click)="delete()" class="ml-0" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+  </div>
+</div>

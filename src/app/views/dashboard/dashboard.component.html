@@ -1,0 +1,123 @@
+<app-page-header title="Dashboard" [breadcrumbSegments]="['Dashboard', 'Home']"></app-page-header>
+<div class="row">
+  <div class="col-sm-3">
+    <div class="card-box bg-d-blue">
+      <div class="inner">
+        <h3> {{customersCount}} </h3><br>
+        <p> Customers </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-users" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/customers" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-sm-3" >
+    <div class="card-box bg-green">
+      <div class="inner">
+        <h3> {{employeesCount}} </h3><br>
+        <p> Employees </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-suitcase" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/employees" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="card-box bg-orange">
+      <div class="inner">
+        <h3> {{usersCount}} </h3><br>
+        <p> System Users </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-user-plus" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/users" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="card-box bg-blue">
+      <div class="inner">
+        <h3> {{suppliersCount}} </h3><br>
+        <p> Suppliers </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-truck" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/suppliers" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="card-box bg-m-purple">
+      <div class="inner">
+        <h3> {{branchCount}} </h3><br>
+        <p> Branches </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-home" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/branches" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-sm-3" >
+    <div class="card-box bg-brown">
+      <div class="inner">
+        <h3> {{itemsCount}} </h3><br>
+        <p> Items </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-cubes" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/items" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="card-box bg-d-green">
+      <div class="inner">
+        <h3> {{purchaseOrdersCount}} </h3><br>
+        <p> Purchase Orders </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-file-text" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/porders" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="card-box bg-purple">
+      <div class="inner">
+        <h3> {{salesCount}} </h3><br>
+        <p> Sales </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-cart-plus"></i>
+      </div>
+      <a routerLink="/sales" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-3">
+    <div class="card-box bg-red">
+      <div class="inner">
+        <h3> {{complainsCount}} </h3><br>
+        <p> Complains </p>
+      </div>
+      <div class="icon">
+        <i class="fa fa-frown-o" aria-hidden="true"></i>
+      </div>
+      <a routerLink="/complains" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>

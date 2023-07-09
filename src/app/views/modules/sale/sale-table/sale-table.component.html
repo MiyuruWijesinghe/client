@@ -1,0 +1,80 @@
+<app-no-privilege *ngIf="!privilege.showAll" message="No privilege to show all sales"></app-no-privilege>
+<div *ngIf="privilege.showAll">
+  <app-page-header title="Sales Management" [breadcrumbSegments]="['Sales', 'Show All Sales']"></app-page-header>
+  <div *ngIf="saleDataPage!==undefined">
+    <mat-card>
+      <mat-card-content>
+        <div class="mb-2" *ngIf="privilege.add">
+          <button class="mx-0" routerLink="/sales/add" mat-flat-button color="primary"><mat-icon>add</mat-icon> New Sale</button>
+        </div>
+        <div class="mb-1">
+          <div class="row">
+
+            <div class="col-md-6 col-lg-3">
+              <mat-form-field class="w-100 search-form-field" appearance="outline">
+                <mat-label>Search by Branch </mat-label>
+                <mat-select [formControl]="branchField" (ngModelChange)="loadData()">
+                  <mat-option [value]="null" selected >Any Branch</mat-option>
+                  <mat-option *ngFor="let branch of branches" [value]="branch.id">{{branch.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+
+
+          </div>
+        </div>
+        <div class="table-responsive" *ngIf="saleDataPage.totalElements > 0">
+          <table mat-table [dataSource]="saleDataPage.content" class="w-100">
+
+
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef> Code </th>
+              <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef> Amount </th>
+              <td mat-cell *matCellDef="let element"> {{ element.amount }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="more-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button routerLink="/sales/{{element.id}}" class="mat-btn-sm" mat-flat-button color="primary"><mat-icon>visibility</mat-icon> View</button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button (click)="delete(element)" class="mat-btn-sm" mat-flat-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <app-empty-data-table message="No sales to show" *ngIf="saleDataPage.totalElements === 0"></app-empty-data-table>
+        <div class="mt-1">
+          <mat-paginator
+            [length]="saleDataPage.totalElements"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 50, 100]"
+            (page)="paginate($event)"
+            [showFirstLastButtons]="true"
+          >
+          </mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

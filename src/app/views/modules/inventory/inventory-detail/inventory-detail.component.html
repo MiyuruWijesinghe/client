@@ -1,0 +1,108 @@
+<app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a inventory"></app-no-privilege>
+<app-object-not-found *ngIf="loaded && !inventory" message="Inventory Not Found"></app-object-not-found>
+<app-loading *ngIf="!loaded"></app-loading>
+<div *ngIf="inventory && privilege.showOne">
+  <app-page-header
+    title="Inventory Detail Page of {{ this.inventory.code }}"
+    [breadcrumbSegments]="['Inventories', 'Show All Inventories', 'Details of ' + this.inventory.code]"
+  ></app-page-header>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-card class="example-card">
+        <mat-card-content>
+          <table class="w-100 table-striped custom-data-table">
+            <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{inventory.code}}</td>
+            </tr>
+            <tr>
+              <th>Creator</th>
+              <td>{{inventory.creator.id}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-md-8">
+      <mat-card >
+        <mat-card-content style="min-height: 400px">
+
+          <mat-tab-group>
+            <mat-tab label="Inventory">
+
+              <mat-card class="example-card">
+                <mat-card-content>
+          <table class="w-100 table-striped custom-data-table">
+            <tbody>
+
+            <tr>
+              <th>Branch</th>
+              <td>{{inventory.branch.name}}</td>
+            </tr>
+            <tr>
+              <th>Item</th>
+              <td>{{inventory.item.name}}</td>
+            </tr>
+
+            <tr>
+              <th>Date of manufactured</th>
+              <td [innerHTML]="inventory.domanufactured | date"></td>
+            </tr>
+            <tr>
+              <th>Date of Expired</th>
+              <td [innerHTML]="inventory.doexpired | date"></td>
+            </tr>
+
+            <tr>
+              <th>Inventory initqty</th>
+              <td>{{inventory.initqty}}</td>
+            </tr>
+
+            <tr>
+              <th>Inventory qty</th>
+              <td>{{inventory.qty}}</td>
+            </tr>
+
+            <tr>
+              <th>Inventory Batch number</th>
+              <td>{{inventory.batchno}}</td>
+            </tr>
+            </tbody>
+          </table>
+                </mat-card-content>
+              </mat-card>
+            </mat-tab>
+
+            <mat-tab label="Customer Types">
+
+              <mat-card class="example-card">
+                <mat-card-content>
+
+                  <table class="w-100 table-striped custom-data-table">
+                    <tbody>
+                    <tr *ngFor="let inventorycustomertype of inventory.inventorycustomertypeList">
+                      <th>{{inventorycustomertype.price}}</th>
+                      <th>{{inventorycustomertype.customertype.name}}</th>
+
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </mat-card-content>
+              </mat-card>
+            </mat-tab>
+
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="d-flex mt-5">
+    <span class="spacer"></span>
+    <button *ngIf="privilege.showAll" routerLink="/inventories" class="mr-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Inventories</button>
+    <button *ngIf="privilege.update" routerLink="/inventories/edit/{{inventory.id}}" mat-raised-button color="accent"><mat-icon>edit</mat-icon> Update</button>
+    <button *ngIf="privilege.delete" (click)="delete()" class="ml-0" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+<app-no-privilege *ngIf="!privilege.update" message="No privilege to change complain detalis"></app-no-privilege>
+<div *ngIf="this.complain && privilege.update">
+  <app-page-header title="Update Complain" [breadcrumbSegments]="['Complains', 'Update Complain']"></app-page-header>
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-card>
+          <mat-card-content>
+            <h1 mat-dialog-title>Update Complain Form</h1>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" required>
+                <mat-hint>Ex: Kamal Perera</mat-hint>
+                <mat-error *ngIf="nameField.invalid">
+                  <span *ngIf="nameField.errors.required">Name is required</span>
+                  <span *ngIf="nameField.errors.minlength">Name should has at least {{nameField.errors.minlength.requiredLength}} characters </span>
+                  <span *ngIf="nameField.errors.maxlength">Name length should not exceed {{nameField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>NIC Number</mat-label>
+                <input matInput formControlName="nic" required>
+                <mat-hint>Ex: 789456123V or 197894506123</mat-hint>
+                <mat-error *ngIf="nicField.invalid">
+                  <span *ngIf="nicField.errors.required">NIC Number is required</span>
+                  <span *ngIf="nicField.errors.minlength">NIC Number should has at least {{nicField.errors.minlength.requiredLength}} characters, </span>
+                  <span *ngIf="nicField.errors.maxlength">NIC NUmber length should not exceed {{nicField.errors.maxlength.requiredLength}} characters, </span>
+                  <span *ngIf="nicField.errors.pattern">Invalid NIC number</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Primary Contact</mat-label>
+                    <input matInput formControlName="contact" required>
+                    <mat-hint>Ex: 0778941234 or 0112789456</mat-hint>
+                    <mat-error *ngIf="contactField.invalid">
+                      <span *ngIf="contactField.errors.required">Primary contact number is required</span>
+                      <span *ngIf="contactField.errors.minlength">Contact number should has at least {{contactField.errors.minlength.requiredLength}} characters, </span>
+                      <span *ngIf="contactField.errors.maxlength">Contact nUmber length should not exceed {{contactField.errors.maxlength.requiredLength}} characters, </span>
+                      <span *ngIf="contactField.errors.pattern">Invalid contact number</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Item </mat-label>
+                    <mat-select required formControlName="item">
+                      <mat-option [value]="null" selected disabled>Select a Item </mat-option>
+                      <mat-option *ngFor="let item of items" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="itemField.invalid">
+                      <span *ngIf="itemField.errors.required">Item is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Address</mat-label>
+                <textarea matInput formControlName="address" required></textarea>
+                <mat-hint>Ex: 123, Gampaha Road, Colombo</mat-hint>
+                <mat-error *ngIf="addressField.invalid">
+                  <span *ngIf="addressField.errors.required">Address is required</span>
+                  <span *ngIf="addressField.errors.minlength">Address should has at least {{addressField.errors.minlength.requiredLength}} characters </span>
+                  <span *ngIf="addressField.errors.maxlength">Address length should not exceed {{addressField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+                <mat-error *ngIf="descriptionField.invalid">
+                  <span *ngIf="descriptionField.errors.maxlength">Description length should not exceed {{descriptionField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+
+
+              </div>
+            </div>
+            <div class="text-right mt-5 d-flex">
+              <button *ngIf="privilege.showAll" routerLink="/complains" class="ml-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Complains</button>
+              <span class="spacer"></span>
+              <button mat-stroked-button type="button" (click)="discardChanges()"><mat-icon>refresh</mat-icon> Reset</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit"><mat-icon>save</mat-icon> Save Changes</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="right">
+            <span class="text-warning">*</span> Required Fields
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </div>
+    <div class="col">
+
+    </div>
+  </div>
+</div>

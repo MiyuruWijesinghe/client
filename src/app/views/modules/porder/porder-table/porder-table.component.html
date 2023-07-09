@@ -1,0 +1,106 @@
+<app-no-privilege *ngIf="!privilege.showAll" message="No privilege to show all porders"></app-no-privilege>
+<div *ngIf="privilege.showAll">
+  <app-page-header title="Purchase Order Management" [breadcrumbSegments]="['Purchase Orders', 'Show All Purchase Orders']"></app-page-header>
+  <div *ngIf="porderDataPage!==undefined">
+    <mat-card>
+      <mat-card-content>
+        <div class="mb-2" *ngIf="privilege.add">
+          <button class="mx-0" routerLink="/porders/add" mat-flat-button color="primary"><mat-icon>add</mat-icon> New Purchase Order</button>
+        </div>
+        <div class="mb-1">
+          <div class="row">
+
+
+            <div class="col-md-6 col-lg-4">
+              <mat-form-field class="w-100 search-form-field" appearance="outline">
+                <mat-label>Search by Status </mat-label>
+                <mat-select [formControl]="porderstatusField" (ngModelChange)="loadData()">
+                  <mat-option [value]="null" selected >Any Status</mat-option>
+                  <mat-option *ngFor="let porderstatus of porderstatuses" [value]="porderstatus.id">{{porderstatus.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <mat-form-field class="w-100 search-form-field" appearance="outline">
+                <mat-label>Search by Branch </mat-label>
+                <mat-select [formControl]="branchField" (ngModelChange)="loadData()">
+                  <mat-option [value]="null" selected >Any Branch</mat-option>
+                  <mat-option *ngFor="let branch of branches" [value]="branch.id">{{branch.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+              <mat-form-field class="w-100 search-form-field" appearance="outline">
+                <mat-label>Search by Supplier </mat-label>
+                <mat-select [formControl]="supplierField" (ngModelChange)="loadData()">
+                  <mat-option [value]="null" selected >Any Supplier</mat-option>
+                  <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{supplier.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+          </div>
+        </div>
+        <div class="table-responsive" *ngIf="porderDataPage.totalElements > 0">
+          <table mat-table [dataSource]="porderDataPage.content" class="w-100">
+
+
+            <ng-container matColumnDef="porderstatus">
+              <th mat-header-cell *matHeaderCellDef> Status  </th>
+              <td mat-cell *matCellDef="let element"> {{ element.porderstatus.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="branch">
+              <th mat-header-cell *matHeaderCellDef> Branch  </th>
+              <td mat-cell *matCellDef="let element"> {{ element.branch.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="supplier">
+              <th mat-header-cell *matHeaderCellDef> Supplier  </th>
+              <td mat-cell *matCellDef="let element"> {{ element.supplier.name }} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="more-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button routerLink="/porders/{{element.id}}" class="mat-btn-sm" mat-flat-button color="primary"><mat-icon>visibility</mat-icon> View</button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button (click)="delete(element)" class="mat-btn-sm" mat-flat-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="update-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button routerLink="/porders/edit/{{element.id}}" class="mat-btn-sm" mat-flat-button color="accent"><mat-icon>edit</mat-icon> Update</button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <app-empty-data-table message="No porders to show" *ngIf="porderDataPage.totalElements === 0"></app-empty-data-table>
+        <div class="mt-1">
+          <mat-paginator
+            [length]="porderDataPage.totalElements"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 50, 100]"
+            (page)="paginate($event)"
+            [showFirstLastButtons]="true"
+          >
+          </mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

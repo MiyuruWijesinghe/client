@@ -1,0 +1,144 @@
+<app-no-privilege *ngIf="!privilege.update" message="No privilege to change inventory detalis"></app-no-privilege>
+<div *ngIf="this.inventory && privilege.update">
+  <app-page-header title="Update Inventory" [breadcrumbSegments]="['Inventory', 'Update Inventory']"></app-page-header>
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-card>
+          <mat-card-content>
+            <h1 mat-dialog-title>Inventory Update Form</h1>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Qty</mat-label>
+                    <input matInput formControlName="qty" required>
+                    <mat-hint>Ex: 900</mat-hint>
+                    <mat-error *ngIf="qtyField.invalid">
+                      <span *ngIf="qtyField.errors.required">Qty is required</span>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Batch number</mat-label>
+                    <input matInput formControlName="batchno" required>
+                    <mat-hint>Ex: B2</mat-hint>
+                    <mat-error *ngIf="batchnoField.invalid">
+                      <span *ngIf="batchnoField.errors.required">Batch number is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Date of Expired</mat-label>
+                    <input required matInput [matDatepicker]="doexpiredpicker" formControlName="doexpired">
+                    <mat-datepicker-toggle matSuffix [for]="doexpiredpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #doexpiredpicker></mat-datepicker>
+                    <mat-error *ngIf="doexpiredField.invalid">
+                      <span *ngIf="doexpiredField.errors.required">Date of Expired is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Date of Manufactured</mat-label>
+                    <input required matInput [matDatepicker]="domanufacturedpicker" formControlName="domanufactured">
+                    <mat-datepicker-toggle matSuffix [for]="domanufacturedpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #domanufacturedpicker></mat-datepicker>
+                    <mat-error *ngIf="domanufacturedField.invalid">
+                      <span *ngIf="domanufacturedField.errors.required">Date of manufactured is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+            </div>
+
+            <table class="w-100 table-striped custom-data-table">
+              <thead>
+              <tr>
+                <th>Inventory item</th>
+                <th>Last price</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let inventory of inventories; let i = index">
+                <td>{{inventory.item.name}}</td>
+                <td>{{inventory.item.lastprice}}</td>
+
+              </tr>
+              </tbody>
+            </table>
+
+
+
+            <h3 class="mb-0 mat-subheading-1 font-weight-light">Granted Items</h3>
+            <app-inventory-customertype-update-sub-form [min]="1"  [customertypes]="customertypes" formControlName="inventorycustomertype"></app-inventory-customertype-update-sub-form>
+            <div class="error-box" *ngIf="inventorycustomertypeField.invalid && !inventorycustomertypeField.pristine">
+              <p *ngIf="inventorycustomertypeField.errors.min">Should has at least one allowance</p>
+            </div>
+
+            <div class="text-right mt-5 d-flex">
+              <button *ngIf="privilege.showAll" routerLink="/inventories" class="ml-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Inventories</button>
+              <span class="spacer"></span>
+              <button mat-stroked-button type="button" (click)="discardChanges()"><mat-icon>refresh</mat-icon> Reset</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit"><mat-icon>save</mat-icon> Save Changes</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="right">
+            <span class="text-warning">*</span> Required Fields
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </div>
+    <div class="col">
+      <form [formGroup]="notificationForm" (ngSubmit)="sendMessage()">
+        <mat-card class="w-75">
+          <mat-card-content>
+            <div class="form-group">
+              <mat-label><h1>Message Box <mat-icon>message</mat-icon></h1></mat-label>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Message</mat-label>
+                <input matInput formControlName="message">
+                <mat-hint>Enter Your Message</mat-hint>
+                <mat-error *ngIf="messageField.invalid">
+                  <span *ngIf="messageField.errors.required">Message is required</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Receiver</mat-label>
+                <mat-select formControlName="systemUser">
+                  <mat-option [value]="null" selected disabled>Select a Receiver</mat-option>
+                  <mat-option *ngFor="let systemUser of systemUsers" [value]="systemUser.id">
+                    <img *ngIf="systemUser.photo" class="mat-option-img" src="{{thumbnailURL}}{{systemUser.photo}}"> {{systemUser.username}} - {{systemUser.employee.callingname}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="systemUserField.invalid">
+                  <span *ngIf="systemUserField.errors.required">Receiver is required</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="text-right mt-5 d-flex">
+              <span class="spacer"></span>
+              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Reset</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit" [disabled]="!notificationForm.valid"> Send</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+
+</div>

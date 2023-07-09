@@ -1,0 +1,85 @@
+<app-no-privilege *ngIf="!privilege.showAll" message="No privilege to show all inventories"></app-no-privilege>
+<div *ngIf="privilege.showAll">
+  <app-page-header title="Inventory Management" [breadcrumbSegments]="['Inventories', 'Show All Inventories']"></app-page-header>
+  <div *ngIf="inventoryDataPage!==undefined">
+    <mat-card>
+      <mat-card-content>
+        <div class="mb-1">
+          <div class="row">
+
+
+            <div class="col-md-6 col-lg-6">
+              <mat-form-field class="w-100 search-form-field" appearance="outline">
+                <mat-label>Search by Branch </mat-label>
+                <mat-select [formControl]="branchField" (ngModelChange)="loadData()">
+                  <mat-option [value]="null" selected >Any Branch</mat-option>
+                  <mat-option *ngFor="let branch of branches" [value]="branch.id">{{branch.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6 col-lg-6">
+              <mat-form-field class="w-100 search-form-field" appearance="outline">
+                <mat-label>Search by Item </mat-label>
+                <mat-select [formControl]="itemField" (ngModelChange)="loadData()">
+                  <mat-option [value]="null" selected >Any Item</mat-option>
+                  <mat-option *ngFor="let item of items" [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+          </div>
+        </div>
+        <div class="table-responsive" *ngIf="inventoryDataPage.totalElements > 0">
+          <table mat-table [dataSource]="inventoryDataPage.content" class="w-100">
+
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef> Code  </th>
+              <td mat-cell *matCellDef="let element"> {{ element.code }} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="branch">
+              <th mat-header-cell *matHeaderCellDef> Branch  </th>
+              <td mat-cell *matCellDef="let element"> {{ element.branch.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="item">
+              <th mat-header-cell *matHeaderCellDef> Item  </th>
+              <td mat-cell *matCellDef="let element"> {{ element.item.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="qty">
+              <th mat-header-cell *matHeaderCellDef> Quantity  </th>
+              <td mat-cell *matCellDef="let element"> {{ element.qty}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="more-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button routerLink="/inventories/{{element.id}}" class="mat-btn-sm" mat-flat-button color="primary"><mat-icon>visibility</mat-icon> View</button>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <app-empty-data-table message="No inventories to show" *ngIf="inventoryDataPage.totalElements === 0"></app-empty-data-table>
+        <div class="mt-1">
+          <mat-paginator
+            [length]="inventoryDataPage.totalElements"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 50, 100]"
+            (page)="paginate($event)"
+            [showFirstLastButtons]="true"
+          >
+          </mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

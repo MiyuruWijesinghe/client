@@ -1,0 +1,141 @@
+<app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a item"></app-no-privilege>
+<div *ngIf="sale && privilege.showOne">
+  <app-page-header
+    title="Item Detail Page of {{ this.sale.code }}"
+    [breadcrumbSegments]="['Sales', 'Show All Sales', 'Details of ' + this.sale.code]"
+  ></app-page-header>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-card class="example-card">
+        <mat-card-content style="min-height: 400px" >
+          <table class="w-100 table-striped custom-data-table">
+            <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{sale.code}}</td>
+            </tr>
+            <tr>
+              <th>Created Date</th>
+              <td>{{sale.tocreation | date}}</td>
+            </tr>
+            <tr>
+              <th>Created Time</th>
+              <td>{{sale.tocreation | date:'shortTime'}}</td>
+            </tr>
+            <tr>
+              <th>Creator</th>
+              <td>{{sale.creator.id}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-md-8">
+      <mat-card>
+        <mat-card-content style="min-height: 400px">
+
+          <mat-tab-group>
+            <mat-tab label="Item">
+
+              <mat-card class="example-card">
+                <mat-card-content>
+                  <table class="w-100 table-striped custom-data-table">
+                    <tbody>
+                    <tr>
+                      <th>ID</th>
+                      <td>{{sale.code}}</td>
+                    </tr>
+                    <tr>
+                      <th>Amount</th>
+                      <td>{{sale.amount}}</td>
+                    </tr>
+
+                    <tr>
+                      <th>Sale date</th>
+                      <td>{{sale.date}}</td>
+                    </tr>
+                    <tr>
+                      <th>Customer</th>
+                      <td>{{sale.customer.name}}</td>
+                    </tr>
+
+                    <tr>
+                      <th>Branch</th>
+                      <td>{{sale.branch.name}}</td>
+                    </tr>
+
+                    <tr *ngIf="sale.description">
+                      <th>Description</th>
+                      <td [innerHTML]="sale.description | nl2br"></td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+
+                </mat-card-content>
+              </mat-card>
+            </mat-tab>
+
+
+
+            <mat-tab label="Saleitem List">
+
+              <mat-card class="example-card">
+                <mat-card-content>
+
+                  <table class="w-100 table-striped custom-data-table">
+                    <tr>
+                      <th>QTY</th>
+                      <th>Inventory</th>
+                    </tr>
+                    <tbody>
+                    <tr *ngFor="let saleitem of sale.saleitemList">
+                      <th>{{saleitem.qty}}</th>
+                      <th>{{saleitem.item.name}}</th>
+
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </mat-card-content>
+              </mat-card>
+            </mat-tab>
+
+           <!-- <mat-tab label="Salepayment List">
+
+              <mat-card class="example-card">
+                <mat-card-content>
+
+                  <table class="w-100 table-striped custom-data-table">
+                    <tbody>
+                    <tr>
+                      <th>Payment id</th>
+                      <th>paid amount</th>
+                    </tr>
+                    <tr *ngFor="let salepayment of sale.salepaymentList">
+                      <th>{{salepayment.id}}</th>
+                      <th>{{salepayment.pamount}}</th>
+
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </mat-card-content>
+              </mat-card>
+            </mat-tab>-->
+
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+</div>
+<div class="d-flex mt-5">
+  <span class="spacer"></span>
+  <button *ngIf="privilege.showAll" routerLink="/sales" class="mr-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Sales</button>
+  <button *ngIf="privilege.delete" (click)="delete()" class="ml-0" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+</div>
+

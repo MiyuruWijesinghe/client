@@ -1,0 +1,290 @@
+<app-no-privilege message="No privilege to add a new employee" *ngIf="!privilege.add"></app-no-privilege>
+<div *ngIf="privilege.add">
+  <app-page-header title="Add New Employee" [breadcrumbSegments]="['Employees', 'Add New Employee']"></app-page-header>
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="form" (ngSubmit)="submit()" #ngForm="ngForm">
+        <mat-card>
+          <mat-card-content>
+            <h1 mat-dialog-title>Employee Form</h1>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-sm-4">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Title</mat-label>
+                    <mat-select required formControlName="nametitle">
+                      <mat-option [value]="null" selected disabled>Select a Title</mat-option>
+                      <mat-option *ngFor="let nametitle of nametitles" [value]="nametitle.id">{{nametitle.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="nametitleField.invalid">
+                      <span *ngIf="nametitleField.errors.required">Name title is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Calling Name</mat-label>
+                    <input matInput formControlName="callingname" required>
+                    <mat-hint>Ex: Kamal </mat-hint>
+                    <mat-error *ngIf="callingnameField.invalid">
+                      <span *ngIf="callingnameField.errors.required">Name is required</span>
+                      <span *ngIf="callingnameField.errors.minlength">Name should has at least {{callingnameField.errors.minlength.requiredLength}} characters </span>
+                      <span *ngIf="callingnameField.errors.maxlength">Name length should not exceed {{callingnameField.errors.maxlength.requiredLength}} characters </span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Branch</mat-label>
+                    <mat-select required formControlName="branch">
+                      <mat-option [value]="null" selected disabled>Select a Branch</mat-option>
+                      <mat-option *ngFor="let branch of branches" [value]="branch.id">{{branch.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="branchField.invalid">
+                      <span *ngIf="branchField.errors.required">Branch is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="fullname" required>
+                <mat-hint>Ex: Kamal Perera</mat-hint>
+                <mat-error *ngIf="fullnameField.invalid">
+                  <span *ngIf="fullnameField.errors.required">Name is required</span>
+                  <span *ngIf="fullnameField.errors.minlength">Name should has at least {{fullnameField.errors.minlength.requiredLength}} characters </span>
+                  <span *ngIf="fullnameField.errors.maxlength">Name length should not exceed {{fullnameField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>NIC Number</mat-label>
+                    <input matInput formControlName="nic" required>
+                    <mat-hint>Ex: 789456123V or 197894506123</mat-hint>
+                    <mat-error *ngIf="nicField.invalid">
+                      <span *ngIf="nicField.errors.required">NIC Number is required</span>
+                      <span *ngIf="nicField.errors.minlength">NIC Number should has at least {{nicField.errors.minlength.requiredLength}} characters, </span>
+                      <span *ngIf="nicField.errors.maxlength">NIC NUmber length should not exceed {{nicField.errors.maxlength.requiredLength}} characters, </span>
+                      <span *ngIf="nicField.errors.pattern">Invalid NIC number</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Date of Birth</mat-label>
+
+                    <input required matInput [matDatepicker]="picker" formControlName="dobirth">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker startView="multi-year" (yearSelected)="1992"  #picker></mat-datepicker>
+
+                    <mat-error *ngIf="dobirthField.invalid">
+                      <span *ngIf="dobirthField.errors.required">Date of birth is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Gender</label>
+                  <mat-radio-group class="form-radio-group" required formControlName="gender">
+                    <mat-radio-button class="form-radio-button"  *ngFor="let gender of genders" [value]="gender.id">{{gender.name}}</mat-radio-button>
+                    <mat-error *ngIf="genderField.invalid && ngForm.submitted">
+                      <span *ngIf="genderField.errors.required">Gender is required</span>
+                    </mat-error>
+                  </mat-radio-group>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Civil Status</mat-label>
+                    <mat-select required formControlName="civilstatus">
+                      <mat-option [value]="null" selected disabled>Select a Civil Status</mat-option>
+                      <mat-option *ngFor="let civilstatus of civilstatuses" [value]="civilstatus.id">{{civilstatus.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="civilstatusField.invalid">
+                      <span *ngIf="civilstatusField.errors.required">Civil status is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Mobile Phone Number</mat-label>
+                    <input matInput formControlName="mobile" required>
+                    <mat-hint>Ex: 0778941234 or 778941234</mat-hint>
+                    <mat-error *ngIf="mobileField.invalid">
+                      <span *ngIf="mobileField.errors.required">Mobile phone number is required</span>
+                      <span *ngIf="mobileField.errors.minlength">Mobile phone number should has at least {{mobileField.errors.minlength.requiredLength}} characters, </span>
+                      <span *ngIf="mobileField.errors.maxlength">Mobile phone number length should not exceed {{mobileField.errors.maxlength.requiredLength}} characters, </span>
+                      <span *ngIf="mobileField.errors.pattern">Invalid Mobile phone number</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Land Phone Number</mat-label>
+                    <input matInput formControlName="land" >
+                    <mat-hint>Ex: 0338941234 or 338941234</mat-hint>
+                    <mat-error *ngIf="mobileField.invalid">
+                      <span *ngIf="mobileField.errors.minlength">Land phone number should has at least {{mobileField.errors.minlength.requiredLength}} characters, </span>
+                      <span *ngIf="mobileField.errors.maxlength">Land phone number length should not exceed {{mobileField.errors.maxlength.requiredLength}} characters, </span>
+                      <span *ngIf="mobileField.errors.pattern">Invalid Land phone number</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Email Address</mat-label>
+                    <input matInput formControlName="email">
+                    <mat-hint>Ex: user@sample.com</mat-hint>
+                    <mat-error *ngIf="emailField.invalid">
+                      <span *ngIf="emailField.errors.minlength">Email address should has at least {{emailField.errors.minlength.requiredLength}} characters, </span>
+                      <span *ngIf="emailField.errors.maxlength">Email address length should not exceed {{emailField.errors.maxlength.requiredLength}} characters, </span>
+                      <span *ngIf="emailField.errors.email">Invalid email address</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Address</mat-label>
+                <textarea rows="3" matInput formControlName="address" required></textarea>
+                <mat-hint>Ex: 123, Gampaha Road, Colombo</mat-hint>
+                <mat-error *ngIf="addressField.invalid">
+                  <span *ngIf="addressField.errors.required">Address is required</span>
+                  <span *ngIf="addressField.errors.minlength">Address should has at least {{addressField.errors.minlength.requiredLength}} characters </span>
+                  <span *ngIf="addressField.errors.maxlength">Address length should not exceed {{addressField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Designation</mat-label>
+                    <mat-select required formControlName="designation">
+                      <mat-option [value]="null" selected disabled>Select a Designation</mat-option>
+                      <mat-option *ngFor="let designation of designations" [value]="designation.id">{{designation.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="designationField.invalid">
+                      <span *ngIf="designationField.errors.required">Designation is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Date of Recruitment</mat-label>
+                    <input required matInput [matDatepicker]="dorecruitepicker" formControlName="dorecruite">
+                    <mat-datepicker-toggle matSuffix [for]="dorecruitepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #dorecruitepicker></mat-datepicker>
+                    <mat-error *ngIf="dorecruiteField.invalid">
+                      <span *ngIf="dorecruiteField.errors.required">Date of recruitment is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+                <mat-error *ngIf="descriptionField.invalid">
+                  <span *ngIf="descriptionField.errors.maxlength">Description length should not exceed {{descriptionField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Photo</mat-label>
+                <app-file-chooser [maxFileSize]="5*1024*1024" [min]="1" [max]="1" [accept]="['image/*', 'application/pdf']" formControlName="photo"></app-file-chooser>
+                <mat-hint>Ex: Select a image file </mat-hint>
+                <mat-error *ngIf="photoField.invalid">
+                  <span *ngIf="photoField.errors.min">Select at least one photo</span>
+                  <span *ngIf="photoField.errors.max">Select at most one photo</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+
+
+            <div class="text-right mt-5 d-flex">
+              <button *ngIf="privilege.showAll" routerLink="/employees" class="ml-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Employees</button>
+              <span class="spacer"></span>
+              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Clear</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit"><mat-icon>save</mat-icon> Save</button>
+            </div>
+
+          </mat-card-content>
+
+          <mat-card-actions align="right">
+            <span class="text-warning">*</span> Required Fields
+          </mat-card-actions>
+
+        </mat-card>
+      </form>
+    </div>
+    <div class="col">
+      <form [formGroup]="notificationForm" (ngSubmit)="sendMessage()">
+        <mat-card class="w-75">
+          <mat-card-content>
+            <div class="form-group">
+              <mat-label><h1>Message Box <mat-icon>message</mat-icon></h1></mat-label>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Message</mat-label>
+                <input matInput formControlName="message">
+                <mat-hint>Enter Your Message</mat-hint>
+                <mat-error *ngIf="messageField.invalid">
+                  <span *ngIf="messageField.errors.required">Message is required</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Receiver</mat-label>
+                <mat-select formControlName="systemUser">
+                  <mat-option [value]="null" selected disabled>Select a Receiver</mat-option>
+                  <mat-option *ngFor="let systemUser of systemUsers" [value]="systemUser.id">
+                    <img *ngIf="systemUser.photo" class="mat-option-img" src="{{thumbnailURL}}{{systemUser.photo}}"> {{systemUser.username}} - {{systemUser.employee.callingname}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="systemUserField.invalid">
+                  <span *ngIf="systemUserField.errors.required">Receiver is required</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="text-right mt-5 d-flex">
+              <span class="spacer"></span>
+              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Reset</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit" [disabled]="!notificationForm.valid"> Send</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+
+
+</div>

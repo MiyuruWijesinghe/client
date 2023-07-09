@@ -1,0 +1,78 @@
+<app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a customer"></app-no-privilege>
+<div *ngIf="complain && privilege.showOne">
+  <app-page-header
+    title="Complain Detail Page of {{ this.complain.code }}"
+    [breadcrumbSegments]="['Complains', 'Show All Complains', 'Details of ' + this.complain.code]"
+  ></app-page-header>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-card class="example-card">
+        <mat-card-content>
+          <table class="w-100 table-striped custom-data-table">
+            <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{complain.code}}</td>
+            </tr>
+            <tr>
+              <th>Created Date</th>
+              <td>{{complain.tocreation | date}}</td>
+            </tr>
+            <tr>
+              <th>Created Time</th>
+              <td>{{complain.tocreation | date: 'shortTime': '+0530'}}</td>
+            </tr>
+            <tr>
+              <th>Creator</th>
+              <td>{{complain.creator.id}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-md-8">
+      <mat-card class="example-card">
+        <mat-card-content>
+          <table class="w-100 table-striped custom-data-table">
+            <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{complain.code}}</td>
+            </tr>
+            <tr>
+              <th> Name</th>
+              <td>{{complain.name}} </td>
+            </tr>
+            <tr>
+              <th>NIC</th>
+              <td>{{complain.nic}}</td>
+            </tr>
+            <tr>
+              <th>Primary contact</th>
+              <td>{{complain.contact}}</td>
+            </tr>
+            <tr>
+              <th>Item</th>
+              <td>{{complain.item.name}}</td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td [innerHTML]="complain.address | nl2br"></td>
+            </tr>
+            <tr *ngIf="complain.description">
+              <th>Description</th>
+              <td [innerHTML]="complain.description | nl2br"></td>
+            </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="d-flex mt-5">
+    <span class="spacer"></span>
+    <button *ngIf="privilege.showAll" routerLink="/complains" class="mr-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Complains</button>
+    <button *ngIf="privilege.delete" (click)="delete()" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+  </div>
+</div>

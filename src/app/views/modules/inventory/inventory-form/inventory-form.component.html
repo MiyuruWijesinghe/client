@@ -1,0 +1,140 @@
+<app-no-privilege message="No privilege to add a new inventory" *ngIf="!privilege.add"></app-no-privilege>
+<div *ngIf="privilege.add">
+  <app-page-header title="Add New Inventory" [breadcrumbSegments]="['Inventory', 'Add New Inventory']"></app-page-header>
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="form" (ngSubmit)="submit()" >
+        <mat-card>
+          <mat-card-content>
+            <h1 mat-dialog-title>Inventory Form</h1>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Branch</mat-label>
+                    <mat-select required formControlName="branch">
+                      <mat-option [value]="null" selected disabled>Select a Branch</mat-option>
+                      <mat-option *ngFor="let branch of branches" [value]="branch.id">{{branch.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="branchField.invalid">
+                      <span *ngIf="branchField.errors.required">Branch Field is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Item</mat-label>
+                    <mat-select required formControlName="item">
+                      <mat-option [value]="null" selected disabled>Select a Item</mat-option>
+                      <mat-option *ngFor="let item of items" [value]="item.id">{{item.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="itemField.invalid">
+                      <span *ngIf="itemField.errors.required">Item is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="formGroup" >
+              <div class="row">
+                <div class="col-md-4">
+
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Batch no</mat-label>
+                    <input matInput formControlName="batchno" required>
+                    <mat-hint>Ex: B1</mat-hint>
+                    <mat-error *ngIf="batchnoField.invalid">
+                      <span *ngIf="batchnoField.errors.required">Batch numer is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Initial qty</mat-label>
+                    <input matInput formControlName="initqty" required>
+                    <mat-hint>Ex:70 </mat-hint>
+                    <mat-error *ngIf="initqtyField.invalid">
+                      <span *ngIf="initqtyField.errors.required">Initial qty is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Qty</mat-label>
+                    <input matInput formControlName="qty" required>
+                    <mat-hint>Ex:700 </mat-hint>
+                    <mat-error *ngIf="qtyField.invalid">
+                      <span *ngIf="qtyField.errors.required">Qty is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+
+
+            </div>
+
+            <div class="formGroup" >
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Date of Manufactured</mat-label>
+                    <input required matInput [matDatepicker]="domanufacturepicker" formControlName="domanufactured">
+                    <mat-datepicker-toggle matSuffix [for]="domanufacturepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #domanufacturepicker></mat-datepicker>
+                    <mat-error *ngIf="domanufacturedField.invalid">
+                      <span *ngIf="domanufacturedField.errors.required">Date of manufactured is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Date of Expired</mat-label>
+                    <input required matInput [matDatepicker]="doexpiredpicker" formControlName="doexpired">
+                    <mat-datepicker-toggle matSuffix [for]="doexpiredpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #doexpiredpicker></mat-datepicker>
+                    <mat-error *ngIf="doexpiredField.invalid">
+                      <span *ngIf="doexpiredField.errors.required">Date of expired is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </div>
+
+            <h3 class="mb-0 mat-subheading-1 font-weight-light">Granted Items</h3>
+            <app-inventory-customertype-sub-form [min]="1"  [customertypes]="customertypes" formControlName="inventorycustomertype"></app-inventory-customertype-sub-form>
+            <div class="error-box" *ngIf="inventorycustomertypeField.invalid && !inventorycustomertypeField.pristine">
+              <p *ngIf="inventorycustomertypeField.errors.min">Should has at least one allowance</p>
+            </div>
+
+
+
+
+            <div class="text-right mt-5 d-flex">
+              <button *ngIf="privilege.showAll" routerLink="/inventories" class="ml-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Inventories</button>
+              <span class="spacer"></span>
+              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Clear</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit"><mat-icon>save</mat-icon> Save</button>
+            </div>
+
+          </mat-card-content>
+
+          <mat-card-actions align="right">
+            <span class="text-warning">*</span> Required Fields
+          </mat-card-actions>
+
+        </mat-card>
+      </form>
+    </div>
+    <div class="col">
+
+    </div>
+  </div>
+
+</div>

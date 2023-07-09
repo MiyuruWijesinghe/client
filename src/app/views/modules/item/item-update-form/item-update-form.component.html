@@ -1,0 +1,163 @@
+<app-no-privilege *ngIf="!privilege.update" message="No privilege to change item detalis"></app-no-privilege>
+<div *ngIf="this.item && privilege.update">
+  <app-page-header title="Update Item" [breadcrumbSegments]="['Item', 'Update Item']"></app-page-header>
+  <div class="row">
+    <div class="col">
+      <form [formGroup]="form" (ngSubmit)="submit()" #ngForm="ngForm">
+        <mat-card>
+          <mat-card-content>
+            <h1 mat-dialog-title>Item Update Form</h1>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" required>
+                <mat-hint>Ex: Kamal Perera</mat-hint>
+                <mat-error *ngIf="nameField.invalid">
+                  <span *ngIf="nameField.errors.required">Name is required</span>
+                  <span *ngIf="nameField.errors.minlength">Name should has at least {{nameField.errors.minlength.requiredLength}} characters </span>
+                  <span *ngIf="nameField.errors.maxlength">Name length should not exceed {{nameField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Price</mat-label>
+                <input matInput formControlName="lastprice" required>
+                <mat-hint>Ex: 50.00</mat-hint>
+                <mat-error *ngIf="lastpriceField.invalid">
+                  <span *ngIf="lastpriceField.errors.required">Price is required</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+                <mat-error *ngIf="descriptionField.invalid">
+                  <span *ngIf="descriptionField.errors.maxlength">Description length should not exceed {{descriptionField.errors.maxlength.requiredLength}} characters </span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <h3 class="mb-0 mat-subheading-1 font-weight-light">Granted Branches</h3>
+            <app-item-branch-update-sub-form [min]="1"  [branches]="branches" formControlName="itembranches"></app-item-branch-update-sub-form>
+            <div class="error-box" *ngIf="itembranchesField.invalid && !itembranchesField.pristine">
+              <p *ngIf="itembranchesField.errors.min">Should has at least one allowance</p>
+
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Item Type</mat-label>
+                    <mat-select required formControlName="itemtype">
+                      <mat-option [value]="null" selected disabled>Select a Item Type</mat-option>
+                      <mat-option *ngFor="let itemtype of itemtypes" [value]="itemtype.id">{{itemtype.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="itemtypeField.invalid">
+                      <span *ngIf="itemtypeField.errors.required">Itemtype is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-form-field appearance="standard" class="w-100">
+                    <mat-label>Unit</mat-label>
+                    <mat-select required formControlName="unit">
+                      <mat-option [value]="null" selected disabled>Select a Item Status</mat-option>
+                      <mat-option *ngFor="let unit of units" [value]="unit.id">{{unit.name}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="unitField.invalid">
+                      <span *ngIf="unitField.errors.required">Unit is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-4">
+                  <label>Item status</label>
+                  <mat-radio-group class="form-radio-group" required formControlName="itemstatus">
+                    <mat-radio-button class="form-radio-button"  *ngFor="let itemstatus of itemstatuses" [value]="itemstatus.id">{{itemstatus.name}}</mat-radio-button>
+                    <mat-error *ngIf="itemstatusField.invalid && ngForm.submitted">
+                      <span *ngIf="itemstatusField.errors.required">Item status is required</span>
+                    </mat-error>
+                  </mat-radio-group>
+                </div>
+
+                <div class="col-md-4">
+                  <label>Item category</label>
+                  <mat-radio-group class="form-radio-group" required formControlName="itemcategory">
+                    <mat-radio-button class="form-radio-button"  *ngFor="let itemcategory of itemcategories" [value]="itemcategory.id">{{itemcategory.name}}</mat-radio-button>
+                    <mat-error *ngIf="itemcategoryField.invalid && ngForm.submitted">
+                      <span *ngIf="itemcategoryField.errors.required">Item category is required</span>
+                    </mat-error>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+
+
+
+
+            <div class="text-right mt-5 d-flex">
+              <button *ngIf="privilege.showAll" routerLink="/items" class="ml-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Items</button>
+              <span class="spacer"></span>
+              <button mat-stroked-button type="button" (click)="discardChanges()"><mat-icon>refresh</mat-icon> Reset</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit"><mat-icon>save</mat-icon> Save</button>
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="right">
+            <span class="text-warning">*</span> Required Fields
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </div>
+    <div class="col">
+      <form [formGroup]="notificationForm" (ngSubmit)="sendMessage()">
+        <mat-card class="w-75">
+          <mat-card-content>
+            <div class="form-group">
+              <mat-label><h1>Message Box <mat-icon>message</mat-icon></h1></mat-label>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="standard" class="w-100">
+                <mat-label>Message</mat-label>
+                <input matInput formControlName="message">
+                <mat-hint>Enter Your Message</mat-hint>
+                <mat-error *ngIf="messageField.invalid">
+                  <span *ngIf="messageField.errors.required">Message is required</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Receiver</mat-label>
+                <mat-select formControlName="systemUser">
+                  <mat-option [value]="null" selected disabled>Select a Receiver</mat-option>
+                  <mat-option *ngFor="let systemUser of systemUsers" [value]="systemUser.id">
+                    <img *ngIf="systemUser.photo" class="mat-option-img" src="{{thumbnailURL}}{{systemUser.photo}}"> {{systemUser.username}} - {{systemUser.employee.callingname}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="systemUserField.invalid">
+                  <span *ngIf="systemUserField.errors.required">Receiver is required</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="text-right mt-5 d-flex">
+              <span class="spacer"></span>
+              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Reset</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit" [disabled]="!notificationForm.valid"> Send</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+
+</div>
