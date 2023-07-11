@@ -70,6 +70,7 @@
   <div class="d-flex mt-5">
     <span class="spacer"></span>
     <button *ngIf="privilege.showAll" routerLink="/complains" class="mr-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Complains</button>
+    <button *ngIf="privilege.update" routerLink="/complains/edit/{{complain.id}}" mat-raised-button color="accent"><mat-icon>edit</mat-icon> Update</button>
     <button *ngIf="privilege.delete" (click)="delete()" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
   </div>
 </div>

@@ -98,6 +98,7 @@
 <div class="d-flex mt-5">
   <span class="spacer"></span>
   <button *ngIf="privilege.showAll" routerLink="/sales" class="mr-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Sales</button>
+  <button *ngIf="privilege.update" routerLink="/sales/edit/{{sale.id}}" mat-raised-button color="accent"><mat-icon>edit</mat-icon> Update</button>
   <button *ngIf="privilege.delete" (click)="delete()" class="ml-0" mat-raised-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
 </div>
 
