@@ -2,10 +2,7 @@
 <app-object-not-found *ngIf="loaded && !employee" message="Employee Not Found"></app-object-not-found>
 <app-loading *ngIf="!loaded"></app-loading>
 <div *ngIf="employee && privilege.showOne">
-  <app-page-header
-    title="Employee Detail Page of {{ this.employee.code }}"
-    [breadcrumbSegments]="['Employees', 'Show All Employees', 'Details of ' + this.employee.code]"
-  ></app-page-header>
+  <app-page-header title="Employee Detail Page of {{ this.employee.code }}" [breadcrumbSegments]="['Employees', 'Show All Employees', 'Details of ' + this.employee.code]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">

@@ -4,10 +4,11 @@
   <div *ngIf="inventoryDataPage!==undefined">
     <mat-card>
       <mat-card-content>
+        <div class="mb-2" *ngIf="privilege.add">
+          <button class="mx-0" routerLink="/inventories/add" mat-flat-button color="primary"><mat-icon>add</mat-icon> New Inventory</button>
+        </div>
         <div class="mb-1">
           <div class="row">
-
-
             <div class="col-md-6 col-lg-6">
               <mat-form-field class="w-100 search-form-field" appearance="outline">
                 <mat-label>Search by Branch </mat-label>
@@ -27,8 +28,6 @@
                 </mat-select>
               </mat-form-field>
             </div>
-
-
           </div>
         </div>
         <div class="table-responsive" *ngIf="inventoryDataPage.totalElements > 0">
@@ -38,7 +37,6 @@
               <th mat-header-cell *matHeaderCellDef> Code  </th>
               <td mat-cell *matCellDef="let element"> {{ element.code }} </td>
             </ng-container>
-
 
             <ng-container matColumnDef="branch">
               <th mat-header-cell *matHeaderCellDef> Branch  </th>
@@ -55,7 +53,6 @@
               <td mat-cell *matCellDef="let element"> {{ element.qty}} </td>
             </ng-container>
 
-
             <ng-container matColumnDef="more-col">
               <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let element" class="btn-col">
@@ -63,6 +60,19 @@
               </td>
             </ng-container>
 
+            <ng-container matColumnDef="delete-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button (click)="delete(element)" class="mat-btn-sm" mat-flat-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="update-col">
+              <th class="btn-col" mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element" class="btn-col">
+                <button routerLink="/inventories/edit/{{element.id}}" class="mat-btn-sm" mat-flat-button color="accent"><mat-icon>edit</mat-icon> Update</button>
+              </td>
+            </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

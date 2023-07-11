@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Item} from '../../../../entities/item';
 import {ItemService} from '../../../../services/item.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -27,21 +27,23 @@ export class ItemDetailComponent extends AbstractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
       await this.loadData();
       this.refreshData();
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: this.item.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.itemService.delete(this.item.id);
       await this.router.navigateByUrl('/items');

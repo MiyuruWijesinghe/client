@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input} from '@angular/core';
 import {FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {AbstractSubFormComponent} from '../../../../../shared/ui-components/abstract-sub-form/abstract-sub-form.component';
 import {Purchaseitem} from '../../../../../entities/purchaseitem';
@@ -28,14 +28,6 @@ export class PurchaseItemSubFormComponent extends AbstractSubFormComponent <Purc
 
   @Input()
   items: Item[] = [];
-
-
-  constructor(protected dialog: MatDialog, private snackBar: MatSnackBar) {
-    super();
-  }
-
-  // Form related variables and functions
-
   fieldValidations = {
     qty: [],
     item: [],
@@ -53,57 +45,60 @@ export class PurchaseItemSubFormComponent extends AbstractSubFormComponent <Purc
     batchno: new FormControl('', this.fieldValidations.batchno),
     domanufactured: new FormControl('', this.fieldValidations.domanufactured),
     doexpired: new FormControl('', this.fieldValidations.doexpired),
-
-
-
   });
 
-  get idField(): FormControl{
+  constructor(protected dialog: MatDialog, private snackBar: MatSnackBar) {
+    super();
+  }
+
+  get idField(): FormControl {
     return this.form.controls.id as FormControl;
   }
 
-  get qtyField(): FormControl{
+  get qtyField(): FormControl {
     return this.form.controls.qty as FormControl;
   }
 
-  get itemField(): FormControl{
+  get itemField(): FormControl {
     return this.form.controls.item as FormControl;
   }
-  get doexpiredField(): FormControl{
+
+  get doexpiredField(): FormControl {
     return this.form.controls.doexpired as FormControl;
   }
-  get domanufacturedField(): FormControl{
+
+  get domanufacturedField(): FormControl {
     return this.form.controls.domanufactured as FormControl;
   }
-  get batchnoField(): FormControl{
+
+  get batchnoField(): FormControl {
     return this.form.controls.batchno as FormControl;
   }
-  get unitpriceField(): FormControl{
+
+  get unitpriceField(): FormControl {
     return this.form.controls.unitprice as FormControl;
   }
 
-  get isFormEmpty(): boolean{
+  get isFormEmpty(): boolean {
     return this.isEmptyField(this.idField)
-      &&   this.isEmptyField(this.qtyField)
-      &&   this.isEmptyField(this.itemField)
-  &&   this.isEmptyField(this.unitpriceField)
-  &&   this.isEmptyField(this.doexpiredField)
-  &&   this.isEmptyField(this.domanufacturedField)
-  &&   this.isEmptyField(this.batchnoField);
+      && this.isEmptyField(this.qtyField)
+      && this.isEmptyField(this.itemField)
+      && this.isEmptyField(this.unitpriceField)
+      && this.isEmptyField(this.doexpiredField)
+      && this.isEmptyField(this.domanufacturedField)
+      && this.isEmptyField(this.batchnoField);
   }
 
-  setValidations(): void{
-    this.fieldValidations.qty = [ Validators.required ];
-    this.fieldValidations.item = [ Validators.required ];
-    this.fieldValidations.unitprice = [ Validators.required ];
-    this.fieldValidations.batchno = [ Validators.required ];
+  setValidations(): void {
+    this.fieldValidations.qty = [Validators.required];
+    this.fieldValidations.item = [Validators.required];
+    this.fieldValidations.unitprice = [Validators.required];
+    this.fieldValidations.batchno = [Validators.required];
     // this.fieldValidations.domanufactured = [ Validators.required ];
     // this.fieldValidations.doexpired = [ Validators.required ];
-
-
   }
 
-  removeValidations(): void{
+  removeValidations(): void {
     this.fieldValidations.qty = [];
     this.fieldValidations.item = [];
     this.fieldValidations.unitprice = [];
@@ -116,8 +111,8 @@ export class PurchaseItemSubFormComponent extends AbstractSubFormComponent <Purc
     this.idField.patchValue(dataItem.id);
     this.qtyField.patchValue(dataItem.qty);
 
-    for (const item of this.items){
-      if (JSON.stringify(dataItem.item) === JSON.stringify(item)){
+    for (const item of this.items) {
+      if (JSON.stringify(dataItem.item) === JSON.stringify(item)) {
         this.itemField.patchValue(item);
       }
     }
@@ -129,32 +124,30 @@ export class PurchaseItemSubFormComponent extends AbstractSubFormComponent <Purc
 
   }
 
-  resetForm(): void{
+  resetForm(): void {
     this.form.reset();
     this.removeValidations();
   }
-
-
-
-  // Operations related functions
 
   getDeleteConfirmMessage(dataItem: Porderitem): string {
     return `Are you sure to remove \u201C ${dataItem.item.name} \u201D from allowance list ?`;
   }
 
   getUpdateConfirmMessage(dataItem: Porderitem): string {
-    if (this.isFormEmpty){
+    if (this.isFormEmpty) {
       return `Are you sure to update \u201C\u00A0${dataItem.item.name}\u00A0\u201D\u00A0?`;
     }
 
     return `Are you sure to update \u201C\u00A0${dataItem.item.name}\u00A0\u201D and discard existing form data\u00A0?`;
   }
 
-  addData(): void{
-    if (this.form.invalid) { return; }
+  addData(): void {
+    if (this.form.invalid) {
+      return;
+    }
 
-    for (const existingItem of this.dataList){
-      if (existingItem.item.id === this.itemField.value){
+    for (const existingItem of this.dataList) {
+      if (existingItem.item.id === this.itemField.value) {
         this.snackBar.open('Selected item is already exist', null, {duration: 2000});
         return;
       }
@@ -168,7 +161,6 @@ export class PurchaseItemSubFormComponent extends AbstractSubFormComponent <Purc
     dataItem.domanufactured = DateHelper.getDateAsString(this.domanufacturedField.value);
     dataItem.doexpired = DateHelper.getDateAsString(this.doexpiredField.value);
     dataItem.unitprice = this.unitpriceField.value;
-
 
     this.addToTop(dataItem);
     this.resetForm();

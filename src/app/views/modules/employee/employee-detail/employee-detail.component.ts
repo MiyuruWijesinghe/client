@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {Employee} from '../../../../entities/employee';
 import {EmployeeService} from '../../../../services/employee.service';
@@ -18,7 +18,6 @@ export class EmployeeDetailComponent extends AbstractComponent implements OnInit
   selectedId: number;
   photo: string = null;
 
-
   constructor(
     private employeeService: EmployeeService,
     private route: ActivatedRoute,
@@ -29,9 +28,9 @@ export class EmployeeDetailComponent extends AbstractComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
-      try{
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
+      try {
         await this.loadData();
       } finally {
         this.initialLoaded();
@@ -40,14 +39,16 @@ export class EmployeeDetailComponent extends AbstractComponent implements OnInit
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: this.employee.callingname}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.employeeService.delete(this.employee.id);
       await this.router.navigateByUrl('/employees');
@@ -58,9 +59,9 @@ export class EmployeeDetailComponent extends AbstractComponent implements OnInit
     this.updatePrivileges();
     this.employee = await this.employeeService.get(this.selectedId);
 
-    if (this.employee.photo == null){
+    if (this.employee.photo == null) {
       this.photo = null;
-    }else {
+    } else {
       const photoObject = await this.employeeService.getPhoto(this.selectedId);
       this.photo = photoObject.file;
     }

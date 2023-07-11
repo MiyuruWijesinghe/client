@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input} from '@angular/core';
 import {FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {AbstractSubFormComponent} from '../../../../../shared/ui-components/abstract-sub-form/abstract-sub-form.component';
 import {Itembranch} from '../../../../../entities/itembranch';
@@ -22,55 +22,51 @@ import {Item} from '../../../../../entities/item';
     }
   ]
 })
-export class ItemBranchUpdateSubFormComponent extends AbstractSubFormComponent<Itembranch>{
+export class ItemBranchUpdateSubFormComponent extends AbstractSubFormComponent<Itembranch> {
 
   @Input()
   branches: Branch[] = [];
   items: Item[] = [];
-
-
-
-  constructor(protected dialog: MatDialog) {
-    super();
-  }
-
-  // Form related variables and functions
-
   fieldValidations = {
     rop: [],
     branch: [],
   };
 
+  // Form related variables and functions
   form = new FormGroup({
     id: new FormControl(null),
     rop: new FormControl('', this.fieldValidations.rop),
     branch: new FormControl('', this.fieldValidations.branch),
   });
 
-  get idField(): FormControl{
+  constructor(protected dialog: MatDialog) {
+    super();
+  }
+
+  get idField(): FormControl {
     return this.form.controls.id as FormControl;
   }
 
-  get ropField(): FormControl{
+  get ropField(): FormControl {
     return this.form.controls.rop as FormControl;
   }
 
-  get branchField(): FormControl{
+  get branchField(): FormControl {
     return this.form.controls.branch as FormControl;
   }
 
-  get isFormEmpty(): boolean{
+  get isFormEmpty(): boolean {
     return this.isEmptyField(this.idField)
-      &&   this.isEmptyField(this.ropField)
-      &&   this.isEmptyField(this.branchField);
+      && this.isEmptyField(this.ropField)
+      && this.isEmptyField(this.branchField);
   }
 
-  setValidations(): void{
-    this.fieldValidations.rop = [ Validators.required ];
-    this.fieldValidations.branch = [ Validators.required ];
+  setValidations(): void {
+    this.fieldValidations.rop = [Validators.required];
+    this.fieldValidations.branch = [Validators.required];
   }
 
-  removeValidations(): void{
+  removeValidations(): void {
     this.fieldValidations.rop = [];
     this.fieldValidations.branch = [];
   }
@@ -87,11 +83,10 @@ export class ItemBranchUpdateSubFormComponent extends AbstractSubFormComponent<I
     }
   }
 
-  resetForm(): void{
+  resetForm(): void {
     this.form.reset();
     this.removeValidations();
   }
-
 
 
   // Operations related functions
@@ -101,15 +96,17 @@ export class ItemBranchUpdateSubFormComponent extends AbstractSubFormComponent<I
   }
 
   getUpdateConfirmMessage(dataItem: Itembranch): string {
-    if (this.isFormEmpty){
+    if (this.isFormEmpty) {
       return `Are you sure to update \u201C\u00A0${dataItem.branch.name}\u00A0\u201D\u00A0?`;
     }
 
     return `Are you sure to update \u201C\u00A0${dataItem.branch.name}\u00A0\u201D and discard existing form data\u00A0?`;
   }
 
-  addData(): void{
-    if (this.form.invalid) { return; }
+  addData(): void {
+    if (this.form.invalid) {
+      return;
+    }
 
     const dataItem: Itembranch = new Itembranch();
     dataItem.id = this.idField.value;

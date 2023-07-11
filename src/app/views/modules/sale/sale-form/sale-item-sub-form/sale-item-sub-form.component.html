@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-md-7">
       <div class="sub-form-table-container" style="height: 240px;">
-        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No allowances to show</div>
+        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No records to show</div>
         <div *ngIf="dataList.length > 0" >
 
           <table class="w-100 mat-table">
             <thead>
             <tr>
               <th>Inventory item</th>
-              <th>Qty</th>
+              <th>Quantity</th>
               <th>Unit price</th>
             </tr>
             </thead>
@@ -40,7 +40,6 @@
     <div class="col-md-5">
       <form [formGroup]="form" (ngSubmit)="addData()">
 
-
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Inventory item</mat-label>
           <mat-select  formControlName="item" >
@@ -53,30 +52,28 @@
 
         </mat-form-field>
 
-
         <mat-form-field appearance="outline" class="w-100 mb-2">
-          <mat-label>Qty</mat-label>
+          <mat-label>Quantity</mat-label>
           <input matInput formControlName="qty" [required]="fieldValidations.qty.length!=0" (focus)="setValidations()">
           <mat-hint>Ex: 800</mat-hint>
           <mat-error *ngIf="qtyField.invalid">
-            <span *ngIf="qtyField.errors.required">QTY is required</span>
+            <span *ngIf="qtyField.errors.required">Quantity is required</span>
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="w-100 mb-2">
-          <mat-label>Unitprice</mat-label>
+          <mat-label>Unit price</mat-label>
           <input matInput formControlName="unitprice"   (focus)="setValidations()">
           <mat-hint>Ex: 800</mat-hint>
           <mat-error *ngIf="unitpriceField.invalid">
           </mat-error>
         </mat-form-field>
 
-
         <div class="text-right mt-5 d-flex">
           <span class="spacer"></span>
           <button [disabled]="disabled" (click)="resetForm()" class="mat-btn-sm" mat-stroked-button type="button"><mat-icon>refresh</mat-icon> Clear </button>
           <button [disabled]="disabled" (click)="setValidations()" class="mr-0 mat-btn-sm" mat-flat-button color="accent" type="submit" >
-            <mat-icon>save</mat-icon> ADD
+            <mat-icon>save</mat-icon> Add
           </button>
         </div>
       </form>

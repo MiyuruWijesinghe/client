@@ -83,7 +83,7 @@
             </div>
             <div class="text-right mt-5 d-flex">
               <span class="spacer"></span>
-              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Reset</button>
+              <button mat-stroked-button type="reset" (click)="resetNotificationForm()"><mat-icon>refresh</mat-icon> Reset</button>
               <button class="mr-0" mat-flat-button color="primary" type="submit" [disabled]="!notificationForm.valid"> Send</button>
             </div>
           </mat-card-content>

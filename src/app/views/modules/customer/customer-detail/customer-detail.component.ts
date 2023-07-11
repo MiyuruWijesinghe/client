@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Customer} from '../../../../entities/customer';
 import {CustomerService} from '../../../../services/customer.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {DeleteConfirmDialogComponent} from '../../../../shared/views/delete-confirm-dialog/delete-confirm-dialog.component';
 import {AbstractComponent} from '../../../../shared/abstract-component';
-import {dashCaseToCamelCase} from '@angular/compiler/src/util';
 import {LoggedUser} from '../../../../shared/logged-user';
 import {UsecaseList} from '../../../../usecase-list';
 
@@ -28,21 +27,23 @@ export class CustomerDetailComponent extends AbstractComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
       await this.loadData();
       this.refreshData();
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: this.customer.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.customerService.delete(this.customer.id);
       await this.router.navigateByUrl('/customers');

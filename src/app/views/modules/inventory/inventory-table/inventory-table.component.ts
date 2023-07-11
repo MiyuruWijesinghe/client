@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {InventoryDataPage} from '../../../../entities/inventory-data-page';
 import {Branch} from '../../../../entities/branch';
-import {Supplier} from '../../../../entities/supplier';
 import {FormControl} from '@angular/forms';
 import {InventoryService} from '../../../../services/inventory.service';
 import {BranchService} from '../../../../services/branch.service';
-import {SupplierService} from '../../../../services/supplier.service';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {PageRequest} from '../../../../shared/page-request';
-import {SupplierDataPage} from '../../../../entities/supplier-data-page';
 import {BranchDataPage} from '../../../../entities/branch-data-page';
 import {LoggedUser} from '../../../../shared/logged-user';
 import {UsecaseList} from '../../../../usecase-list';
@@ -26,7 +23,6 @@ import {ItemDataPage} from '../../../../entities/item-data-page';
   styleUrls: ['./inventory-table.component.scss']
 })
 export class InventoryTableComponent extends AbstractComponent implements OnInit {
-
 
   inventoryDataPage: InventoryDataPage;
   displayedColumns: string[] = [];
@@ -56,34 +52,36 @@ export class InventoryTableComponent extends AbstractComponent implements OnInit
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.showAll) { return; }
+    if (!this.privilege.showAll) {
+      return;
+    }
 
     this.setDisplayedColumns();
 
     const pageRequest = new PageRequest();
-    pageRequest.pageIndex  = this.pageIndex;
-    pageRequest.pageSize  = this.pageSize;
+    pageRequest.pageIndex = this.pageIndex;
+    pageRequest.pageSize = this.pageSize;
 
     pageRequest.addSearchCriteria('branch', this.branchField.value);
     pageRequest.addSearchCriteria('item', this.itemField.value);
 
     this.inventoryService.getAll(pageRequest).then((page: InventoryDataPage) => {
       this.inventoryDataPage = page;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.itemService.getAll(new PageRequest()).then((data: ItemDataPage) => {
       this.items = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
       this.branches = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -98,26 +96,36 @@ export class InventoryTableComponent extends AbstractComponent implements OnInit
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_INVENTORY);
   }
 
-  setDisplayedColumns(): void{
-    this.displayedColumns = [ 'branch', 'item', 'qty'];
+  setDisplayedColumns(): void {
+    this.displayedColumns = ['branch', 'item', 'qty'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(inventory: Inventory): Promise<void>{
+  async delete(inventory: Inventory): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: inventory.id}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.inventoryService.delete(inventory.id);
       this.loadData();

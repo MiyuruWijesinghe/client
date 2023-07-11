@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Branch} from '../../../../entities/branch';
 import {BranchService} from '../../../../services/branch.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -28,21 +28,23 @@ export class BranchDetailComponent extends AbstractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
       await this.loadData();
       this.refreshData();
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: this.branch.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.branchService.delete(this.branch.id);
       await this.router.navigateByUrl('/branches');

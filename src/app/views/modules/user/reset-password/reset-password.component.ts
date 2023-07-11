@@ -19,7 +19,7 @@ export class ResetPasswordComponent implements OnInit {
   user: User = null;
 
   form = new FormGroup({
-    password: new FormControl(null,[
+    password: new FormControl(null, [
       Validators.required,
       Validators.minLength(8),
       Validators.maxLength(25),
@@ -32,18 +32,6 @@ export class ResetPasswordComponent implements OnInit {
   passwordHide = false;
   passwordConfirmHide = false;
 
-  get passwordField(): FormControl{
-    return this.form.controls.password as FormControl;
-  }
-
-  get passwordConfirmField(): FormControl{
-    return this.form.controls.passwordConfirm as FormControl;
-  }
-
-  get displayName(): string{
-    return User.getDisplayName(this.user);
-  }
-
   constructor(
     private snackBar: MatSnackBar,
     private userService: UserService,
@@ -51,6 +39,18 @@ export class ResetPasswordComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.user = data.user;
+  }
+
+  get passwordField(): FormControl {
+    return this.form.controls.password as FormControl;
+  }
+
+  get passwordConfirmField(): FormControl {
+    return this.form.controls.passwordConfirm as FormControl;
+  }
+
+  get displayName(): string {
+    return User.getDisplayName(this.user);
   }
 
   ngOnInit(): void {
@@ -66,7 +66,7 @@ export class ResetPasswordComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  generatePassword(): void{
+  generatePassword(): void {
     const password = PasswordGenerator.generate();
     this.passwordField.setValue(password);
     this.passwordConfirmField.setValue(password);
@@ -74,14 +74,16 @@ export class ResetPasswordComponent implements OnInit {
     this.passwordConfirmHide = false;
   }
 
-  async submit(): Promise<void>{
-    if (this.form.invalid){ return; }
+  async submit(): Promise<void> {
+    if (this.form.invalid) {
+      return;
+    }
 
-    try{
+    try {
       await this.userService.resetPassword(this.user.id, this.passwordField.value);
       this.snackBar.open('Password reset successfully', null, {duration: 3000});
       this.dialogRef.close();
-    }catch (e) {
+    } catch (e) {
       this.snackBar.open('Something is wrong', null, {duration: 4000});
     }
   }

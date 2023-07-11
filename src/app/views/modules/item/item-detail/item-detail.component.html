@@ -1,9 +1,6 @@
 <app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a item"></app-no-privilege>
 <div *ngIf="item && privilege.showOne">
-  <app-page-header
-    title="Item Detail Page of {{ this.item.code }}"
-    [breadcrumbSegments]="['Items', 'Show All Items', 'Details of ' + this.item.code]"
-  ></app-page-header>
+  <app-page-header title="Item Detail Page of {{ this.item.code }}" [breadcrumbSegments]="['Items', 'Show All Items', 'Details of ' + this.item.code]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">
@@ -38,7 +35,6 @@
 
           <mat-tab-group>
           <mat-tab label="Item">
-
             <mat-card class="example-card">
               <mat-card-content>
                 <table class="w-100 table-striped custom-data-table">
@@ -83,12 +79,9 @@
           </mat-tab>
 
 
-
           <mat-tab label="Branch List">
-
             <mat-card class="example-card">
               <mat-card-content>
-
                 <table class="w-100 table-striped custom-data-table">
                   <tbody>
                   <tr>
@@ -98,11 +91,9 @@
                   <tr *ngFor="let itembranch of item.itembranchList">
                     <td>{{itembranch.rop}}</td>
                     <td>{{itembranch.branch.name}}</td>
-
                   </tr>
                   </tbody>
                 </table>
-
               </mat-card-content>
             </mat-card>
           </mat-tab>

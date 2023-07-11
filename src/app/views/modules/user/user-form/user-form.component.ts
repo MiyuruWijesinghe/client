@@ -55,34 +55,6 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
     ]),
   });
 
-  get employeeField(): FormControl{
-    return this.form.controls.employee as FormControl;
-  }
-
-  get passwordField(): FormControl{
-    return this.form.controls.password as FormControl;
-  }
-
-  get passwordConfirmField(): FormControl{
-    return this.form.controls.passwordConfirm as FormControl;
-  }
-
-  get photoField(): FormControl{
-    return this.form.controls.photo as FormControl;
-  }
-
-  get rolesField(): FormControl{
-    return this.form.controls.roles as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private roleService: RoleService,
     private userService: UserService,
@@ -91,6 +63,34 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
     private router: Router
   ) {
     super();
+  }
+
+  get employeeField(): FormControl {
+    return this.form.controls.employee as FormControl;
+  }
+
+  get passwordField(): FormControl {
+    return this.form.controls.password as FormControl;
+  }
+
+  get passwordConfirmField(): FormControl {
+    return this.form.controls.passwordConfirm as FormControl;
+  }
+
+  get photoField(): FormControl {
+    return this.form.controls.photo as FormControl;
+  }
+
+  get rolesField(): FormControl {
+    return this.form.controls.roles as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
   }
 
   ngOnInit(): void {
@@ -107,7 +107,9 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
   loadData(): any {
 
     this.updatePrivileges();
-    if (!this.privilege.add) { return; }
+    if (!this.privilege.add) {
+      return;
+    }
 
     this.userService.getAllNonUserEmployees().then((data) => {
       this.employees = data;
@@ -118,7 +120,7 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -135,33 +137,41 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
   async submit(): Promise<void> {
     this.photoField.updateValueAndValidity();
     this.photoField.markAsTouched();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const user: User = new User();
     user.password = this.passwordField.value;
     user.roleList = this.rolesField.value;
-
     user.employee = this.employeeField.value;
 
     const photoIds = this.photoField.value;
-    if (photoIds !== null && photoIds !== []){
+    if (photoIds !== null && photoIds !== []) {
       user.photo = photoIds[0];
-    }else{
+    } else {
       user.photo = null;
     }
 
-    try{
+    try {
       const resourceLink: ResourceLink = await this.userService.add(user);
       await this.router.navigateByUrl('/users/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           const msg = JSON.parse(e.error.message);
-          if (msg.employee || msg.password){
-            if (msg.employee) { this.employeeField.setErrors({server: msg.employee}); }
-            if (msg.password) { this.passwordField.setErrors({server: msg.password}); }
+          if (msg.employee || msg.password) {
+            if (msg.employee) {
+              this.employeeField.setErrors({server: msg.employee});
+            }
+            if (msg.password) {
+              this.passwordField.setErrors({server: msg.password});
+            }
             break;
           }
           this.snackBar.open('Validation Error', null, {duration: 2000});
@@ -173,7 +183,7 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
 
   }
 
-  generatePassword(): void{
+  generatePassword(): void {
     const password = PasswordGenerator.generate();
     this.passwordField.setValue(password);
     this.passwordConfirmField.setValue(password);
@@ -182,22 +192,26 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -205,5 +219,9 @@ export class UserFormComponent extends AbstractComponent implements OnInit {
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({value: '', disabled: false}, {emitEvent: false});
   }
 }

@@ -39,43 +39,38 @@
             <div class="formGroup" >
               <div class="row">
                 <div class="col-md-4">
-
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Batch no</mat-label>
                     <input matInput formControlName="batchno" required>
                     <mat-hint>Ex: B1</mat-hint>
                     <mat-error *ngIf="batchnoField.invalid">
-                      <span *ngIf="batchnoField.errors.required">Batch numer is required</span>
+                      <span *ngIf="batchnoField.errors.required">Batch number is required</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
 
                 <div class="col-md-4">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Initial qty</mat-label>
+                    <mat-label>Initial quantity</mat-label>
                     <input matInput formControlName="initqty" required>
                     <mat-hint>Ex:70 </mat-hint>
                     <mat-error *ngIf="initqtyField.invalid">
-                      <span *ngIf="initqtyField.errors.required">Initial qty is required</span>
+                      <span *ngIf="initqtyField.errors.required">Initial quantity is required</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
 
                 <div class="col-md-4">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Qty</mat-label>
+                    <mat-label>Quantity</mat-label>
                     <input matInput formControlName="qty" required>
                     <mat-hint>Ex:700 </mat-hint>
                     <mat-error *ngIf="qtyField.invalid">
-                      <span *ngIf="qtyField.errors.required">Qty is required</span>
+                      <span *ngIf="qtyField.errors.required">Quantity is required</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
-
               </div>
-
-
-
             </div>
 
             <div class="formGroup" >
@@ -112,8 +107,6 @@
             <div class="error-box" *ngIf="inventorycustomertypeField.invalid && !inventorycustomertypeField.pristine">
               <p *ngIf="inventorycustomertypeField.errors.min">Should has at least one allowance</p>
             </div>
-
-
 
 
             <div class="text-right mt-5 d-flex">

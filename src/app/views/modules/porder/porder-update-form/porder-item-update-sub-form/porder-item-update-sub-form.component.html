@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-md-7">
       <div class="sub-form-table-container" style="height: 240px;">
-        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No allowances to show</div>
+        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No records to show</div>
         <div *ngIf="dataList.length > 0" >
 
           <table class="w-100 mat-table">
             <thead>
             <tr>
               <th>Item</th>
-              <th>QTY</th>
+              <th>Quantity</th>
               <th></th>
               <th></th>
             </tr>
@@ -30,7 +30,6 @@
               </td>
             </tr>
             </tbody>
-
           </table>
         </div>
       </div>
@@ -38,7 +37,6 @@
 
     <div class="col-md-5">
       <form [formGroup]="form" (ngSubmit)="addData()">
-
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Item</mat-label>
           <mat-select  formControlName="item">
@@ -58,8 +56,6 @@
             <span *ngIf="qtyField.errors.required">QTY is required</span>
           </mat-error>
         </mat-form-field>
-
-
 
         <div class="text-right mt-5 d-flex">
           <span class="spacer"></span>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from '../../../../entities/user';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -21,14 +21,6 @@ export class UserDetailComponent extends AbstractComponent implements OnInit {
   selectedId: number;
   photo: string = null;
 
-  get displayName(): string{
-    return User.getDisplayName(this.user);
-  }
-
-  get canResetPassword(): boolean{
-    return LoggedUser.can(UsecaseList.RESET_USER_PASSWORDS);
-  }
-
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -39,10 +31,18 @@ export class UserDetailComponent extends AbstractComponent implements OnInit {
     super();
   }
 
+  get displayName(): string {
+    return User.getDisplayName(this.user);
+  }
+
+  get canResetPassword(): boolean {
+    return LoggedUser.can(UsecaseList.RESET_USER_PASSWORDS);
+  }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
-      try{
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
+      try {
         await this.loadData();
       } finally {
         this.initialLoaded();
@@ -51,19 +51,21 @@ export class UserDetailComponent extends AbstractComponent implements OnInit {
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: User.getDisplayName(this.user)}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       try {
         await this.userService.delete(this.user.id);
         await this.router.navigateByUrl('/users');
-      }catch (e) {
+      } catch (e) {
         this.snackBar.open(e.error.message, null, {duration: 4000});
       }
     });
@@ -72,9 +74,9 @@ export class UserDetailComponent extends AbstractComponent implements OnInit {
   async loadData(): Promise<any> {
     this.updatePrivileges();
     this.user = await this.userService.get(this.selectedId);
-    if (this.user.photo == null){
+    if (this.user.photo == null) {
       this.photo = null;
-    }else {
+    } else {
       const photoObject = await this.userService.getPhoto(this.selectedId);
       this.photo = photoObject.file;
     }
@@ -88,7 +90,7 @@ export class UserDetailComponent extends AbstractComponent implements OnInit {
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_USER);
   }
 
-  resetPassword(): void{
+  resetPassword(): void {
     const dialogRef = this.dialog.open(ResetPasswordComponent, {
       width: '350px',
       data: {user: this.user}

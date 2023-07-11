@@ -1,9 +1,6 @@
 <app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a branch"></app-no-privilege>
 <div *ngIf="branch && privilege.showOne">
-  <app-page-header
-    title="Branch Detail Page of {{ this.branch.code }}"
-    [breadcrumbSegments]="['Branches', 'Show All Branches', 'Details of ' + this.branch.code]"
-  ></app-page-header>
+  <app-page-header title="Branch Detail Page of {{ this.branch.code }}" [breadcrumbSegments]="['Branches', 'Show All Branches', 'Details of ' + this.branch.code]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">
@@ -68,9 +65,8 @@
               <th>Fax</th>
               <td>{{branch.fax}}</td>
             </tr>
-
             <tr>
-              <th>Date of recruite</th>
+              <th>Date of Recruit</th>
               <td>{{branch.dorecruite}}</td>
             </tr>
             </tbody>

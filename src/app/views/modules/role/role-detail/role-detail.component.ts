@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {Role} from '../../../../entities/role';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -20,10 +20,6 @@ export class RoleDetailComponent extends AbstractComponent implements OnInit {
   role: Role;
   selectedId: number;
 
-  get creator(): string{
-    return User.getDisplayName(this.role.creator);
-  }
-
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -34,10 +30,14 @@ export class RoleDetailComponent extends AbstractComponent implements OnInit {
     super();
   }
 
+  get creator(): string {
+    return User.getDisplayName(this.role.creator);
+  }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
-      try{
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
+      try {
         await this.loadData();
       } finally {
         this.initialLoaded();
@@ -46,19 +46,21 @@ export class RoleDetailComponent extends AbstractComponent implements OnInit {
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: this.role.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       try {
         await this.roleService.delete(this.role.id);
         await this.router.navigateByUrl('/roles');
-      }catch (e) {
+      } catch (e) {
         this.snackBar.open(e.error.message, null, {duration: 4000});
       }
     });

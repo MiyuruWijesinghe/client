@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {SupplierService} from '../../../../services/supplier.service';
 import {MatDialog} from '@angular/material/dialog';
@@ -24,7 +24,6 @@ export class SupplierTableComponent extends AbstractComponent implements OnInit 
   pageSize = 5;
   pageIndex = 0;
 
-
   nameField = new FormControl();
   contactField = new FormControl();
 
@@ -41,24 +40,23 @@ export class SupplierTableComponent extends AbstractComponent implements OnInit 
     this.refreshData();
   }
 
-  async loadData(): Promise<void>{
+  async loadData(): Promise<void> {
 
     this.updatePrivileges();
 
-    if (this.privilege.showAll){
+    if (this.privilege.showAll) {
       this.setDisplayedColumns();
 
       const pageRequest = new PageRequest();
-      pageRequest.pageIndex  = this.pageIndex;
-      pageRequest.pageSize  = this.pageSize;
-
+      pageRequest.pageIndex = this.pageIndex;
+      pageRequest.pageSize = this.pageSize;
 
       pageRequest.addSearchCriteria('name', this.nameField.value);
       pageRequest.addSearchCriteria('contact', this.contactField.value);
 
-      try{
+      try {
         this.supplieDataPage = await this.supplierService.getAll(pageRequest);
-      }catch (e) {
+      } catch (e) {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
@@ -73,33 +71,40 @@ export class SupplierTableComponent extends AbstractComponent implements OnInit 
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_SUPPLIER);
   }
 
-  setDisplayedColumns(): void{
-    this.displayedColumns = [ 'name', 'contacts', 'email'];
+  setDisplayedColumns(): void {
+    this.displayedColumns = ['name', 'contacts', 'email'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
-    if (this.privilege.update) { this.displayedColumns.push('update-col'); }
-    if (this.privilege.delete) { this.displayedColumns.push('delete-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(supplier: Supplier): Promise<void>{
+  async delete(supplier: Supplier): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: supplier.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.supplierService.delete(supplier.id);
       this.loadData();
     });
   }
-
 
 }

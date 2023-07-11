@@ -69,8 +69,6 @@ export class ItemFormComponent extends AbstractComponent implements OnInit {
       Validators.required
     ]),
     itembranches: new FormControl(),
-
-
   });
 
   notificationForm = new FormGroup({
@@ -81,44 +79,6 @@ export class ItemFormComponent extends AbstractComponent implements OnInit {
       Validators.required
     ]),
   });
-
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
-  get itemtypeField(): FormControl{
-    return this.form.controls.itemtype as FormControl;
-  }
-
-  get itemstatusField(): FormControl{
-    return this.form.controls.itemstatus as FormControl;
-  }
-
-  get lastpriceField(): FormControl{
-    return this.form.controls.lastprice as FormControl;
-  }
-  get unitField(): FormControl{
-    return this.form.controls.unit as FormControl;
-  }
-  get itemcategoryField(): FormControl{
-    return this.form.controls.itemcategory as FormControl;
-  }
-
-  get itembranchesField(): FormControl{
-    return this.form.controls.itembranches as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
 
   constructor(
     private itemService: ItemService,
@@ -135,11 +95,51 @@ export class ItemFormComponent extends AbstractComponent implements OnInit {
     super();
   }
 
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get itemtypeField(): FormControl {
+    return this.form.controls.itemtype as FormControl;
+  }
+
+  get itemstatusField(): FormControl {
+    return this.form.controls.itemstatus as FormControl;
+  }
+
+  get lastpriceField(): FormControl {
+    return this.form.controls.lastprice as FormControl;
+  }
+
+  get unitField(): FormControl {
+    return this.form.controls.unit as FormControl;
+  }
+
+  get itemcategoryField(): FormControl {
+    return this.form.controls.itemcategory as FormControl;
+  }
+
+  get itembranchesField(): FormControl {
+    return this.form.controls.itembranches as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
 
     this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
       this.branches = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -181,7 +181,7 @@ export class ItemFormComponent extends AbstractComponent implements OnInit {
     });
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -197,28 +197,33 @@ export class ItemFormComponent extends AbstractComponent implements OnInit {
 
   async submit(): Promise<void> {
 
-   this.itembranchSubForm.resetForm();
-   this.itembranchesField.markAsDirty();
-   if (this.form.invalid) { return; }
+    this.itembranchSubForm.resetForm();
+    this.itembranchesField.markAsDirty();
+    if (this.form.invalid) {
+      return;
+    }
 
-   const item: Item = new Item();
-   item.name = this.nameField.value;
-   // item.contact2 = (this.contact2Field.value === '') ? null : this.contact2Field.value;
-   item.description = this.descriptionField.value;
-   item.itemtype = this.itemtypeField.value;
-   item.itemstatus = this.itemstatusField.value;
-   item.itemcategory = this.itemcategoryField.value;
-   item.unit = this.unitField.value;
-   item.lastprice = this.lastpriceField.value;
-   item.itembranchList = this.itembranchesField.value;
+    const item: Item = new Item();
+    item.name = this.nameField.value;
+    // item.contact2 = (this.contact2Field.value === '') ? null : this.contact2Field.value;
+    item.description = this.descriptionField.value;
+    item.itemtype = this.itemtypeField.value;
+    item.itemstatus = this.itemstatusField.value;
+    item.itemcategory = this.itemcategoryField.value;
+    item.unit = this.unitField.value;
+    item.lastprice = this.lastpriceField.value;
+    item.itembranchList = this.itembranchesField.value;
 
-   try{
+    try {
       const resourceLink: ResourceLink = await this.itemService.add(item);
       await this.router.navigateByUrl('/items/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -229,22 +234,26 @@ export class ItemFormComponent extends AbstractComponent implements OnInit {
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -254,4 +263,7 @@ export class ItemFormComponent extends AbstractComponent implements OnInit {
     }
   }
 
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
+  }
 }

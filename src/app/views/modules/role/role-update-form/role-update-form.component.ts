@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {Role} from '../../../../entities/role';
 import {LoggedUser} from '../../../../shared/logged-user';
@@ -50,22 +50,6 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
     ]),
   });
 
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get usecaseField(): FormArray{
-    return this.form.controls.usecases as FormArray;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private roleService: RoleService,
     private systemmoduleService: SystemmoduleService,
@@ -78,6 +62,22 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
     super();
   }
 
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get usecaseField(): FormArray {
+    return this.form.controls.usecases as FormArray;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
 
     this.systemmoduleService.getAll().then((data: Systemmodule[]) => {
@@ -87,8 +87,8 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId =  + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
       await this.loadData();
       this.refreshData();
     });
@@ -98,14 +98,16 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
 
     this.updatePrivileges();
 
-    if (!this.privilege.update){ return; }
+    if (!this.privilege.update) {
+      return;
+    }
 
     this.role = await this.roleService.get(this.selectedId);
     this.setValues();
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -119,28 +121,29 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_ROLE);
   }
 
-  discardChanges(): void{
+  discardChanges(): void {
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.setValues();
   }
 
-  setValues(): void{
-    if (this.nameField.pristine) { this.nameField.patchValue(this.role.name); }
+  setValues(): void {
+    if (this.nameField.pristine) {
+      this.nameField.patchValue(this.role.name);
+    }
     if (this.usecaseField.pristine) {
-      for (const usecase of this.role.usecaseList){
+      for (const usecase of this.role.usecaseList) {
         this.usecaseField.push(new FormControl(usecase.id));
       }
     }
   }
 
-
-  isSelectedUsecase(id: number): boolean{
+  isSelectedUsecase(id: number): boolean {
     const selectedIds = this.usecaseField.value;
     let selected = false;
 
-    for (const selectedId of selectedIds){
-      if (selectedId === id){
+    for (const selectedId of selectedIds) {
+      if (selectedId === id) {
         selected = true;
         break;
       }
@@ -149,8 +152,7 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
     return selected;
   }
 
-
-  onUsecaseChange(event: MatSlideToggleChange, id: number): void{
+  onUsecaseChange(event: MatSlideToggleChange, id: number): void {
 
     this.usecaseField.markAsTouched();
     this.usecaseField.markAsDirty();
@@ -172,22 +174,25 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
   async submit(): Promise<void> {
     this.usecaseField.markAsTouched();
     this.usecaseField.markAsDirty();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const newRole: Role = new Role();
     newRole.name = this.nameField.value;
     newRole.usecaseList = this.usecaseField.value;
 
-    try{
+    try {
       const resourceLink: ResourceLink = await this.roleService.update(this.selectedId, newRole);
       if (this.privilege.showOne) {
         await this.router.navigateByUrl('/roles/' + resourceLink.id);
       } else {
         await this.router.navigateByUrl('/roles');
       }
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 403:
           this.snackBar.open(e.error.message, null, {duration: 2000});
           setTimeout(() => {
@@ -196,9 +201,9 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
           break;
         case 400:
           const msg = JSON.parse(e.error.message);
-          if (msg.name){
+          if (msg.name) {
             this.nameField.setErrors({exists: true});
-          }else{
+          } else {
             this.snackBar.open('Validation Error', null, {duration: 2000});
           }
           break;
@@ -209,22 +214,26 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -232,6 +241,10 @@ export class RoleUpdateFormComponent extends AbstractComponent implements OnInit
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({value: '', disabled: false}, {emitEvent: false});
   }
 
 }

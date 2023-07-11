@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {mustMatch} from '../../../../shared/validators/must-match-validator';
 import {strongPassword} from '../../../../shared/validators/strong-password-validator';
@@ -30,42 +30,47 @@ export class ChangePasswordComponent implements OnInit {
     ]),
   }, [mustMatch('newPassword', 'newPasswordConfirm')]);
 
-  get currentPasswordField(): FormControl{
+  constructor(private userService: UserService, private router: Router, private snackBar: MatSnackBar) {
+  }
+
+  get currentPasswordField(): FormControl {
     return this.form.controls.currentPassword as FormControl;
   }
 
-  get newPasswordField(): FormControl{
+  get newPasswordField(): FormControl {
     return this.form.controls.newPassword as FormControl;
   }
 
-  get newPasswordConfirmField(): FormControl{
+  get newPasswordConfirmField(): FormControl {
     return this.form.controls.newPasswordConfirm as FormControl;
   }
-
-  constructor(private userService: UserService, private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid){ return; }
+    if (this.form.invalid) {
+      return;
+    }
 
-    try{
+    try {
       await this.userService.changeMyPassword({
         newPassword: this.newPasswordField.value,
         oldPassword: this.currentPasswordField.value,
       });
       await this.router.navigateByUrl('/');
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 400:
           const errors = JSON.parse(e.error.message);
-          if (errors.oldPassword){
+          if (errors.oldPassword) {
             this.currentPasswordField.setErrors({notExists: true});
           }
           break;
-        default: this.snackBar.open('Something is wrong', 'Error');
+        default:
+          this.snackBar.open('Something is wrong', 'Error');
       }
     }
   }

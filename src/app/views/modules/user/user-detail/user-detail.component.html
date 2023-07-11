@@ -2,10 +2,7 @@
 <app-object-not-found *ngIf="loaded && !user" message="User Not Found"></app-object-not-found>
 <app-loading *ngIf="!loaded"></app-loading>
 <div *ngIf="user && privilege.showOne">
-  <app-page-header
-    title="User Detail Page of {{ this.user.username }}"
-    [breadcrumbSegments]="['Users', 'Show All Users', 'Details of ' + this.user.username]"
-  ></app-page-header>
+  <app-page-header title="User Detail Page of {{ this.user.username }}" [breadcrumbSegments]="['Users', 'Show All Users', 'Details of ' + this.user.username]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">
@@ -23,7 +20,7 @@
               </tr>
               <tr>
                 <th>Creator</th>
-                <td>{{creator}}</td>
+                <td>{{user.creator.username}}</td>
               </tr>
             </tbody>
           </table>

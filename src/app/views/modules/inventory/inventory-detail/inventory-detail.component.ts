@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Inventory} from '../../../../entities/inventory';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -14,8 +14,6 @@ import {InventoryService} from '../../../../services/inventory.service';
   styleUrls: ['./inventory-detail.component.scss']
 })
 export class InventoryDetailComponent extends AbstractComponent implements OnInit {
-
-
   inventory: Inventory;
   selectedId: number;
 
@@ -29,9 +27,9 @@ export class InventoryDetailComponent extends AbstractComponent implements OnIni
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
-      try{
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
+      try {
         await this.loadData();
       } finally {
         this.initialLoaded();
@@ -40,14 +38,16 @@ export class InventoryDetailComponent extends AbstractComponent implements OnIni
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: this.inventory.code}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.inventoryService.delete(this.inventory.id);
       await this.router.navigateByUrl('/inventories');

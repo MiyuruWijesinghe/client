@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {PorderService} from '../../../../services/porder.service';
-import {PorderstatusService} from '../../../../services/porderstatus.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {LoggedUser} from '../../../../shared/logged-user';
@@ -21,9 +20,6 @@ import {Item} from '../../../../entities/item';
 import {ItemService} from '../../../../services/item.service';
 import {ItemDataPage} from '../../../../entities/item-data-page';
 import {PorderItemSubFormComponent} from './porder-item-sub-form/porder-item-sub-form.component';
-import {PorderDataPage} from '../../../../entities/porder-data-page';
-import {Purchaseitem} from '../../../../entities/purchaseitem';
-import {Porderitem} from '../../../../entities/porderitem';
 import {User, UserDataPage} from '../../../../entities/user';
 import {NotificationService} from '../../../../services/notification.service';
 import {UserService} from '../../../../services/user.service';
@@ -34,10 +30,9 @@ import {Notification} from '../../../../entities/notification';
   templateUrl: './porder-form.component.html',
   styleUrls: ['./porder-form.component.scss']
 })
-export class PorderFormComponent extends AbstractComponent implements  OnInit {
+export class PorderFormComponent extends AbstractComponent implements OnInit {
 
-@ViewChild(PorderItemSubFormComponent) porderitemSubForm: PorderItemSubFormComponent;
-
+  @ViewChild(PorderItemSubFormComponent) porderitemSubForm: PorderItemSubFormComponent;
 
   porder: Porder = new Porder();
   branches: Branch[] = [];
@@ -46,16 +41,9 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
   systemUsers: User[] = [];
 
   form = new FormGroup({
-
     description: new FormControl('', [
       Validators.maxLength(65535),
     ]),
-  /*  porderstatus: new FormControl('', [
-      Validators.required
-    ]),*/
-    /*dorecieved: new FormControl('', [
-      Validators.required
-    ]),*/
     branch: new FormControl('', [
       Validators.required
     ]),
@@ -66,7 +54,6 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
       Validators.required
     ]),
     porderitems: new FormControl(),
-
   });
 
   notificationForm = new FormGroup({
@@ -77,37 +64,6 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
       Validators.required
     ]),
   });
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
- /* get porderstatusField(): FormControl{
-    return this.form.controls.porderstatus as FormControl;
-  }*/
- /* get dorecievedField(): FormControl{
-    return this.form.controls.dorecieved as FormControl;
-  }*/
-  get supplierField(): FormControl{
-    return this.form.controls.supplier as FormControl;
-  }
-  get branchField(): FormControl{
-    return this.form.controls.branch as FormControl;
-  }
-  get dorequiredField(): FormControl{
-    return this.form.controls.dorequired as FormControl;
-  }
-  get porderitemsField(): FormControl{
-    return this.form.controls.porderitems as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
 
   constructor(
     private porderservice: PorderService,
@@ -122,10 +78,38 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
     super();
   }
 
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get supplierField(): FormControl {
+    return this.form.controls.supplier as FormControl;
+  }
+
+  get branchField(): FormControl {
+    return this.form.controls.branch as FormControl;
+  }
+
+  get dorequiredField(): FormControl {
+    return this.form.controls.dorequired as FormControl;
+  }
+
+  get porderitemsField(): FormControl {
+    return this.form.controls.porderitems as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
     this.itemService.getAll(new PageRequest()).then((data: ItemDataPage) => {
       this.items = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -133,50 +117,33 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
     this.refreshData();
   }
 
- async loadData(): Promise<any> {
+  async loadData(): Promise<any> {
     this.updatePrivileges();
-    if (!this.privilege.add){ return; }
-
-   /*this.porderstatusService.getAll().then((data: Porderstatus[]) => {
-     this.porderstatuses = data;
-   }).catch( e => {
-     console.log(e);
-     this.snackBar.open('Something is wrong', null, {duration: 2000});
-   });*/
+    if (!this.privilege.add) {
+      return;
+    }
 
     this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
       this.branches = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.supplierService.getAll(new PageRequest()).then((data: SupplierDataPage) => {
       this.suppliers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
   }
-
-  /*getBranchItems(): void{
-    const pageRequest = new PageRequest();
-    pageRequest.addSearchCriteria('branch', this.branchField.value);
-
-    this.itemService.getAll(pageRequest).then((data: ItemDataPage) => {
-      this.items = data.content;
-    }).catch( e => {
-      console.log(e);
-      this.snackBar.open('Something is wrong', null, {duration: 2000});
-    });
-  }*/
 
   updatePrivileges(): any {
     this.privilege.add = LoggedUser.can(UsecaseList.ADD_PORDER);
@@ -190,7 +157,9 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
 
     this.porderitemSubForm.resetForm();
     this.porderitemsField.markAsDirty();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const porder: Porder = new Porder();
     porder.description = this.descriptionField.value;
@@ -199,15 +168,16 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
     porder.dorequired = DateHelper.getDateAsString(this.dorequiredField.value);
     porder.porderitemList = this.porderitemsField.value;
 
-
-
-    try{
+    try {
       const resourceLink: ResourceLink = await this.porderservice.add(porder);
       await this.router.navigateByUrl('/porders/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -218,22 +188,26 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -241,5 +215,9 @@ export class PorderFormComponent extends AbstractComponent implements  OnInit {
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EmployeeService} from '../../../../services/employee.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -121,81 +121,6 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     ]),
   });
 
-  get callingnameField(): FormControl{
-    return this.form.controls.callingname as FormControl;
-  }
-
-  get fullnameField(): FormControl{
-    return this.form.controls.fullname as FormControl;
-  }
-
-  get dobirthField(): FormControl{
-    return this.form.controls.dobirth as FormControl;
-  }
-
-  get nicField(): FormControl{
-    return this.form.controls.nic as FormControl;
-  }
-
-  get mobileField(): FormControl{
-    return this.form.controls.mobile as FormControl;
-  }
-
-  get landField(): FormControl{
-    return this.form.controls.land as FormControl;
-  }
-
-  get addressField(): FormControl{
-    return this.form.controls.address as FormControl;
-  }
-
-  get emailField(): FormControl{
-    return this.form.controls.email as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
-  get dorecruiteField(): FormControl{
-    return this.form.controls.dorecruite as FormControl;
-  }
-
-  get genderField(): FormControl{
-    return this.form.controls.gender as FormControl;
-  }
-
-  get civilstatusField(): FormControl{
-    return this.form.controls.civilstatus as FormControl;
-  }
-
-  get designationField(): FormControl{
-    return this.form.controls.designation as FormControl;
-  }
-
-  get nametitleField(): FormControl{
-    return this.form.controls.nametitle as FormControl;
-  }
-
-  get employeestatusField(): FormControl{
-    return this.form.controls.employeestatus as FormControl;
-  }
-
-  get photoField(): FormControl{
-    return this.form.controls.photo as FormControl;
-  }
-  get branchField(): FormControl{
-    return this.form.controls.branch as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private employeeService: EmployeeService,
     private genderService: GenderService,
@@ -213,9 +138,85 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     super();
   }
 
+  get callingnameField(): FormControl {
+    return this.form.controls.callingname as FormControl;
+  }
+
+  get fullnameField(): FormControl {
+    return this.form.controls.fullname as FormControl;
+  }
+
+  get dobirthField(): FormControl {
+    return this.form.controls.dobirth as FormControl;
+  }
+
+  get nicField(): FormControl {
+    return this.form.controls.nic as FormControl;
+  }
+
+  get mobileField(): FormControl {
+    return this.form.controls.mobile as FormControl;
+  }
+
+  get landField(): FormControl {
+    return this.form.controls.land as FormControl;
+  }
+
+  get addressField(): FormControl {
+    return this.form.controls.address as FormControl;
+  }
+
+  get emailField(): FormControl {
+    return this.form.controls.email as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get dorecruiteField(): FormControl {
+    return this.form.controls.dorecruite as FormControl;
+  }
+
+  get genderField(): FormControl {
+    return this.form.controls.gender as FormControl;
+  }
+
+  get civilstatusField(): FormControl {
+    return this.form.controls.civilstatus as FormControl;
+  }
+
+  get designationField(): FormControl {
+    return this.form.controls.designation as FormControl;
+  }
+
+  get nametitleField(): FormControl {
+    return this.form.controls.nametitle as FormControl;
+  }
+
+  get employeestatusField(): FormControl {
+    return this.form.controls.employeestatus as FormControl;
+  }
+
+  get photoField(): FormControl {
+    return this.form.controls.photo as FormControl;
+  }
+
+  get branchField(): FormControl {
+    return this.form.controls.branch as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId =  + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
       await this.loadData();
       this.refreshData();
     });
@@ -224,12 +225,14 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.update){ return; }
+    if (!this.privilege.update) {
+      return;
+    }
 
     if (this.genderField.pristine) {
       this.genderService.getAll().then((data: Gender[]) => {
         this.genders = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -238,7 +241,7 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     if (this.branchField.pristine) {
       this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
         this.branches = data.content;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -247,7 +250,7 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     if (this.civilstatusField.pristine) {
       this.civilstatusService.getAll().then((data: Civilstatus[]) => {
         this.civilstatuses = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -256,7 +259,7 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     if (this.genderField.pristine) {
       this.designationService.getAll().then((data: Designation[]) => {
         this.designations = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -265,7 +268,7 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     if (this.nametitleField.pristine) {
       this.nametitleService.getAll().then((data: Nametitle[]) => {
         this.nametitles = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -274,7 +277,7 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     if (this.employeestatusField.pristine) {
       this.employeestatusService.getAll().then((data: Employeestatus[]) => {
         this.employeestatuses = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -285,7 +288,7 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -299,34 +302,66 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_EMPLOYEE);
   }
 
-  discardChanges(): void{
+  discardChanges(): void {
     this.form.patchValue(this.employee);
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.setValues();
   }
 
-  setValues(): void{
-    if (this.callingnameField.pristine){ this.callingnameField.patchValue(this.employee.callingname); }
-    if (this.fullnameField.pristine){ this.fullnameField.patchValue(this.employee.fullname); }
-    if (this.dobirthField.pristine){ this.dobirthField.patchValue(this.employee.dobirth); }
-    if (this.nicField.pristine){ this.nicField.patchValue(this.employee.nic); }
-    if (this.mobileField.pristine){ this.mobileField.patchValue(this.employee.mobile); }
-    if (this.landField.pristine){ this.landField.patchValue(this.employee.land); }
-    if (this.addressField.pristine){ this.addressField.patchValue(this.employee.address); }
-    if (this.emailField.pristine){ this.emailField.patchValue(this.employee.email); }
-    if (this.descriptionField.pristine){ this.descriptionField.patchValue(this.employee.description); }
-    if (this.dorecruiteField.pristine){ this.dorecruiteField.patchValue(this.employee.dorecruite); }
-    if (this.genderField.pristine){ this.genderField.patchValue(this.employee.gender.id); }
-    if (this.civilstatusField.pristine){ this.civilstatusField.patchValue(this.employee.civilstatus.id); }
-    if (this.designationField.pristine){ this.designationField.patchValue(this.employee.designation.id); }
-    if (this.nametitleField.pristine){ this.nametitleField.setValue(this.employee.nametitle.id); }
-    if (this.branchField.pristine){ this.branchField.patchValue(this.employee.branch.id); }
-    if (this.employeestatusField.pristine){ this.employeestatusField.patchValue(this.employee.employeestatus.id); }
-    if (this.photoField.pristine){
-      if (this.employee.photo){
+  setValues(): void {
+    if (this.callingnameField.pristine) {
+      this.callingnameField.patchValue(this.employee.callingname);
+    }
+    if (this.fullnameField.pristine) {
+      this.fullnameField.patchValue(this.employee.fullname);
+    }
+    if (this.dobirthField.pristine) {
+      this.dobirthField.patchValue(this.employee.dobirth);
+    }
+    if (this.nicField.pristine) {
+      this.nicField.patchValue(this.employee.nic);
+    }
+    if (this.mobileField.pristine) {
+      this.mobileField.patchValue(this.employee.mobile);
+    }
+    if (this.landField.pristine) {
+      this.landField.patchValue(this.employee.land);
+    }
+    if (this.addressField.pristine) {
+      this.addressField.patchValue(this.employee.address);
+    }
+    if (this.emailField.pristine) {
+      this.emailField.patchValue(this.employee.email);
+    }
+    if (this.descriptionField.pristine) {
+      this.descriptionField.patchValue(this.employee.description);
+    }
+    if (this.dorecruiteField.pristine) {
+      this.dorecruiteField.patchValue(this.employee.dorecruite);
+    }
+    if (this.genderField.pristine) {
+      this.genderField.patchValue(this.employee.gender.id);
+    }
+    if (this.civilstatusField.pristine) {
+      this.civilstatusField.patchValue(this.employee.civilstatus.id);
+    }
+    if (this.designationField.pristine) {
+      this.designationField.patchValue(this.employee.designation.id);
+    }
+    if (this.nametitleField.pristine) {
+      this.nametitleField.setValue(this.employee.nametitle.id);
+    }
+    if (this.branchField.pristine) {
+      this.branchField.patchValue(this.employee.branch.id);
+    }
+    if (this.employeestatusField.pristine) {
+      this.employeestatusField.patchValue(this.employee.employeestatus.id);
+    }
+    if (this.photoField.pristine) {
+      if (this.employee.photo) {
         this.photoField.patchValue([this.employee.photo]);
-      }else {
+      } else {
         this.photoField.patchValue([]);
       }
     }
@@ -335,7 +370,9 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
   async submit(): Promise<void> {
     this.photoField.markAsTouched();
     this.photoField.updateValueAndValidity();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
     const newEmployee: Employee = new Employee();
     newEmployee.callingname = this.callingnameField.value;
     newEmployee.fullname = this.fullnameField.value;
@@ -354,16 +391,17 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
     newEmployee.email = this.emailField.value;
     newEmployee.employeestatus = this.employeestatusField.value;
     newEmployee.branch = this.branchField.value;
-    if (this.photoField.value !== null && this.photoField.value !== []){
+    if (this.photoField.value !== null && this.photoField.value !== []) {
       newEmployee.photo = this.photoField.value ? this.photoField.value[0] : null;
     }
 
-    try{
+    try {
       const resourceLink: ResourceLink = await this.employeeService.update(this.employee.id, newEmployee);
       await this.router.navigateByUrl('/employees/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 403:
           this.snackBar.open(e.error.message, null, {duration: 2000});
           setTimeout(() => {
@@ -380,22 +418,26 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -403,5 +445,9 @@ export class EmployeeUpdateFormComponent extends AbstractComponent implements On
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
   }
 }

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {UserService} from '../../../../services/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from '@angular/router';
 import {LoggedUser} from '../../../../shared/logged-user';
 
 @Component({
@@ -18,36 +17,45 @@ export class ChangePhotoComponent implements OnInit {
     photo: new FormControl(),
   });
 
-  get photoField(): FormControl{
-    return this.form.controls.photo as FormControl;
-  }
-
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+  }
+
+  get photoField(): FormControl {
+    return this.form.controls.photo as FormControl;
+  }
 
   ngOnInit(): void {
-    if (this.user.photo){
+    if (this.user.photo) {
       this.photoField.setValue([this.user.photo]);
     }
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     let photo;
     const photoIds = this.photoField.value;
-    if (photoIds !== null && photoIds !== []){ photo = photoIds[0]; }
-    else{ photo = null; }
+    if (photoIds !== null && photoIds !== []) {
+      photo = photoIds[0];
+    } else {
+      photo = null;
+    }
 
-    try{
+    try {
       await this.userService.changeMyPhoto(photo);
       window.location.assign('/');
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;

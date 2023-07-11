@@ -1,4 +1,4 @@
-<app-no-privilege *ngIf="!privilege.update" message="No privilege to change complain detalis"></app-no-privilege>
+<app-no-privilege *ngIf="!privilege.update" message="No privilege to change complain details"></app-no-privilege>
 <div *ngIf="this.complain && privilege.update">
   <app-page-header title="Update Complain" [breadcrumbSegments]="['Complains', 'Update Complain']"></app-page-header>
   <div class="row">

@@ -2,15 +2,15 @@
   <div class="row">
     <div class="col-md-7">
       <div class="sub-form-table-container" style="height: 240px;">
-        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No saleitems to show</div>
+        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No sale items to show</div>
         <div *ngIf="dataList.length > 0" >
 
           <table class="w-100 mat-table">
             <thead>
             <tr>
-              <th>Qty</th>
+              <th>Quantity</th>
               <th>Inventory item</th>
-              <th>Unitprice </th>
+              <th>Unit price </th>
 
               <th></th>
               <th></th>
@@ -31,7 +31,7 @@
               </td>
               <td class="btn-col">
                 <button [disabled]="disabled" type="button" (click)="updateData(i, dataItem)" class="mat-btn-sm" mat-flat-button color="accent">
-                  <mat-icon>edit</mat-icon> Change
+                  <mat-icon>edit</mat-icon> Update
                 </button>
               </td>
             </tr>
@@ -44,11 +44,11 @@
     <div class="col-md-5">
       <form [formGroup]="form" (ngSubmit)="addData()">
         <mat-form-field appearance="outline" class="w-100 mb-2">
-          <mat-label>Qty</mat-label>
+          <mat-label>Quantity</mat-label>
           <input matInput formControlName="qty" [required]="fieldValidations.qty.length!=0" (focus)="setValidations()">
           <mat-hint>Ex: 800</mat-hint>
           <mat-error *ngIf="qtyField.invalid">
-            <span *ngIf="qtyField.errors.required">QTY is required</span>
+            <span *ngIf="qtyField.errors.required">Quantity is required</span>
           </mat-error>
         </mat-form-field>
 
@@ -65,18 +65,18 @@
 
 
         <mat-form-field appearance="outline" class="w-100 mb-2">
-          <mat-label>Unitprice</mat-label>
+          <mat-label>Unit price</mat-label>
           <input matInput formControlName="unitprice" [required]="fieldValidations.unitprice.length!=0" (focus)="setValidations()">
           <mat-hint>Ex: 800</mat-hint>
           <mat-error *ngIf="unitpriceField.invalid">
-            <span *ngIf="unitpriceField.errors.required">Unitprice is required</span>
+            <span *ngIf="unitpriceField.errors.required">Unit price is required</span>
           </mat-error>
         </mat-form-field>
 
         <div class="text-right mt-5 d-flex">
           <span class="spacer"></span>
           <button [disabled]="disabled" (click)="resetForm()" class="mat-btn-sm" mat-stroked-button type="button"><mat-icon>refresh</mat-icon> Clear </button>
-          <button [disabled]="disabled" (click)="setValidations()" class="mr-0 mat-btn-sm" mat-flat-button color="accent" type="submit"><mat-icon>save</mat-icon> ADD </button>
+          <button [disabled]="disabled" (click)="setValidations()" class="mr-0 mat-btn-sm" mat-flat-button color="accent" type="submit"><mat-icon>save</mat-icon> Add </button>
         </div>
       </form>
     </div>

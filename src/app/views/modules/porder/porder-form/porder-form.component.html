@@ -48,17 +48,6 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-
-
-                <!-- <div class="col-md-6">
-                   <label>Purchase order status</label>
-                   <mat-radio-group class="form-radio-group" required formControlName="gender">
-                     <mat-radio-button class="form-radio-button"  *ngFor="let porderstatus of porderstatuses" [value]="porderstatus.id">{{porderstatus.name}}</mat-radio-button>
-                     <mat-error *ngIf="porderstatusField.invalid && ngForm.submitted">
-                       <span *ngIf="porderstatusField.errors.required">Purchase order status is required</span>
-                     </mat-error>
-                   </mat-radio-group>
-                 </div>-->
               </div>
             </div>
 
@@ -127,7 +116,7 @@
             </div>
             <div class="text-right mt-5 d-flex">
               <span class="spacer"></span>
-              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Reset</button>
+              <button mat-stroked-button type="reset" (click)="resetNotificationForm()"><mat-icon>refresh</mat-icon> Reset</button>
               <button class="mr-0" mat-flat-button color="primary" type="submit" [disabled]="!notificationForm.valid"> Send</button>
             </div>
           </mat-card-content>

@@ -2,10 +2,7 @@
 <app-object-not-found *ngIf="loaded && !role" message="Role Not Found"></app-object-not-found>
 <app-loading *ngIf="!loaded"></app-loading>
 <div *ngIf="role && privilege.showOne">
-  <app-page-header
-    title="Role Detail Page of {{ this.role.name }}"
-    [breadcrumbSegments]="['Roles', 'Show All Roles', 'Details of ' + this.role.name]"
-  ></app-page-header>
+  <app-page-header title="Role Detail Page of {{ this.role.name }}" [breadcrumbSegments]="['Roles', 'Show All Roles', 'Details of ' + this.role.name]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">

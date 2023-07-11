@@ -1,10 +1,8 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input} from '@angular/core';
 import {FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {AbstractSubFormComponent} from '../../../../../shared/ui-components/abstract-sub-form/abstract-sub-form.component';
 import {Porderitem} from '../../../../../entities/porderitem';
-import {Branch} from '../../../../../entities/branch';
 import {MatDialog} from '@angular/material/dialog';
-import {Itembranch} from '../../../../../entities/itembranch';
 import {Item} from '../../../../../entities/item';
 
 @Component({
@@ -23,52 +21,49 @@ import {Item} from '../../../../../entities/item';
     }
   ]
 })
-export class PorderItemSubFormComponent extends AbstractSubFormComponent <Porderitem>  {
+export class PorderItemSubFormComponent extends AbstractSubFormComponent <Porderitem> {
   @Input()
   items: Item[] = [];
-
-
-  constructor(protected dialog: MatDialog) {
-    super();
-  }
-
-  // Form related variables and functions
-
   fieldValidations = {
     qty: [],
     item: [],
   };
 
+  // Form related variables and functions
   form = new FormGroup({
     id: new FormControl(null),
     qty: new FormControl('', this.fieldValidations.qty),
     item: new FormControl('', this.fieldValidations.item),
   });
 
-  get idField(): FormControl{
+  constructor(protected dialog: MatDialog) {
+    super();
+  }
+
+  get idField(): FormControl {
     return this.form.controls.id as FormControl;
   }
 
-  get qtyField(): FormControl{
+  get qtyField(): FormControl {
     return this.form.controls.qty as FormControl;
   }
 
-  get itemField(): FormControl{
+  get itemField(): FormControl {
     return this.form.controls.item as FormControl;
   }
 
-  get isFormEmpty(): boolean{
+  get isFormEmpty(): boolean {
     return this.isEmptyField(this.idField)
-      &&   this.isEmptyField(this.qtyField)
-      &&   this.isEmptyField(this.itemField);
+      && this.isEmptyField(this.qtyField)
+      && this.isEmptyField(this.itemField);
   }
 
-  setValidations(): void{
-    this.fieldValidations.qty = [ Validators.required ];
-    this.fieldValidations.item = [ Validators.required ];
+  setValidations(): void {
+    this.fieldValidations.qty = [Validators.required];
+    this.fieldValidations.item = [Validators.required];
   }
 
-  removeValidations(): void{
+  removeValidations(): void {
     this.fieldValidations.qty = [];
     this.fieldValidations.item = [];
   }
@@ -78,18 +73,17 @@ export class PorderItemSubFormComponent extends AbstractSubFormComponent <Porder
     this.qtyField.patchValue(dataItem.qty);
     this.itemField.patchValue(dataItem.item);
 
-    for (const item of this.items){
-      if (JSON.stringify(dataItem.item) === JSON.stringify(item)){
+    for (const item of this.items) {
+      if (JSON.stringify(dataItem.item) === JSON.stringify(item)) {
         this.itemField.patchValue(item);
       }
     }
   }
 
-  resetForm(): void{
+  resetForm(): void {
     this.form.reset();
     this.removeValidations();
   }
-
 
 
   // Operations related functions
@@ -99,15 +93,17 @@ export class PorderItemSubFormComponent extends AbstractSubFormComponent <Porder
   }
 
   getUpdateConfirmMessage(dataItem: Porderitem): string {
-    if (this.isFormEmpty){
+    if (this.isFormEmpty) {
       return `Are you sure to update \u201C\u00A0${dataItem.item.name}\u00A0\u201D\u00A0?`;
     }
 
     return `Are you sure to update \u201C\u00A0${dataItem.item.name}\u00A0\u201D and discard existing form data\u00A0?`;
   }
 
-  addData(): void{
-    if (this.form.invalid) { return; }
+  addData(): void {
+    if (this.form.invalid) {
+      return;
+    }
 
     const dataItem: Porderitem = new Porderitem();
     dataItem.id = this.idField.value;

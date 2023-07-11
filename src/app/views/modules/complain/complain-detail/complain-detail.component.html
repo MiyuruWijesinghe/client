@@ -1,9 +1,6 @@
 <app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a customer"></app-no-privilege>
 <div *ngIf="complain && privilege.showOne">
-  <app-page-header
-    title="Complain Detail Page of {{ this.complain.code }}"
-    [breadcrumbSegments]="['Complains', 'Show All Complains', 'Details of ' + this.complain.code]"
-  ></app-page-header>
+  <app-page-header title="Complain Detail Page of {{ this.complain.code }}" [breadcrumbSegments]="['Complains', 'Show All Complains', 'Details of ' + this.complain.code]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">

@@ -1,9 +1,6 @@
 <app-no-privilege *ngIf="!privilege.showOne" message="No privilege to show more details of a customer"></app-no-privilege>
 <div *ngIf="customer && privilege.showOne">
-  <app-page-header
-    title="Customer Detail Page of {{ this.customer.code }}"
-    [breadcrumbSegments]="['Customers', 'Show All Customers', 'Details of ' + this.customer.code]"
-  ></app-page-header>
+  <app-page-header title="Customer Detail Page of {{ this.customer.code }}" [breadcrumbSegments]="['Customers', 'Show All Customers', 'Details of ' + this.customer.code]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">

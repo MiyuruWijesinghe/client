@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ComplainDataPage} from '../../../../entities/complain-data-page';
 import {FormControl} from '@angular/forms';
 import {ComplainService} from '../../../../services/complain.service';
@@ -22,8 +22,6 @@ export class ComplainTableComponent extends AbstractComponent implements OnInit 
   displayedColumns: string[] = [];
   pageSize = 5;
   pageIndex = 0;
-
-
   nameField = new FormControl();
   nicField = new FormControl();
   contactField = new FormControl();
@@ -41,25 +39,25 @@ export class ComplainTableComponent extends AbstractComponent implements OnInit 
     this.refreshData();
   }
 
-  async loadData(): Promise<void>{
+  async loadData(): Promise<void> {
 
     this.updatePrivileges();
 
-    if (this.privilege.showAll){
+    if (this.privilege.showAll) {
       this.setDisplayedColumns();
 
       const pageRequest = new PageRequest();
-      pageRequest.pageIndex  = this.pageIndex;
-      pageRequest.pageSize  = this.pageSize;
+      pageRequest.pageIndex = this.pageIndex;
+      pageRequest.pageSize = this.pageSize;
 
 
       pageRequest.addSearchCriteria('name', this.nameField.value);
       pageRequest.addSearchCriteria('nic', this.nicField.value);
       pageRequest.addSearchCriteria('contact', this.contactField.value);
 
-      try{
+      try {
         this.complainDataPage = await this.complainService.getAll(pageRequest);
-      }catch (e) {
+      } catch (e) {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
@@ -74,26 +72,36 @@ export class ComplainTableComponent extends AbstractComponent implements OnInit 
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_COMPLAIN);
   }
 
-  setDisplayedColumns(): void{
-    this.displayedColumns = [ 'name', 'nic', 'contact'];
+  setDisplayedColumns(): void {
+    this.displayedColumns = ['name', 'nic', 'contact'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(complain: Complain): Promise<void>{
+  async delete(complain: Complain): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: complain.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.complainService.delete(complain.id);
       this.loadData();

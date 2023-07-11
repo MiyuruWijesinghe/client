@@ -2,10 +2,7 @@
 <app-object-not-found *ngIf="loaded && !purchase" message="Purchase Not Found"></app-object-not-found>
 <app-loading *ngIf="!loaded"></app-loading>
 <div *ngIf="purchase && privilege.showOne">
-  <app-page-header
-    title="Purchase Detail Page of {{ this.purchase.code }}"
-    [breadcrumbSegments]="['Purchases', 'Show All Purchases', 'Details of ' + this.purchase.code]"
-  ></app-page-header>
+  <app-page-header title="Purchase Detail Page of {{ this.purchase.code }}" [breadcrumbSegments]="['Purchases', 'Show All Purchases', 'Details of ' + this.purchase.code]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">
@@ -34,53 +31,43 @@
       </mat-card>
     </div>
     <div class="col-md-8">
-      <mat-card >
+      <mat-card>
         <mat-card-content style="min-height: 400px">
-
           <mat-tab-group>
             <mat-tab label="Purchase">
-
               <mat-card class="example-card">
                 <mat-card-content>
-          <table class="w-100 table-striped custom-data-table">
-            <tbody>
-
-            <tr>
-              <th>Branch</th>
-              <td>{{purchase.branch.name}}</td>
-            </tr>
-
-            <tr>
-              <th>Amount</th>
-              <td>{{purchase.amount}}</td>
-            </tr>
-
-            <tr>
-              <th> Tax Amount</th>
-              <td>{{purchase.taxamount}}</td>
-            </tr>
-
-            <tr>
-              <th>Total Amount</th>
-              <td>{{purchase.totalamount}}</td>
-            </tr>
-
-            <tr *ngIf="purchase.description">
-              <th>Description</th>
-              <td [innerHTML]="purchase.description | nl2br"></td>
-            </tr>
-
-            </tbody>
-          </table>
+                  <table class="w-100 table-striped custom-data-table">
+                    <tbody>
+                    <tr>
+                      <th>Branch</th>
+                      <td>{{purchase.branch.name}}</td>
+                    </tr>
+                    <tr>
+                      <th>Amount</th>
+                      <td>{{purchase.amount}}</td>
+                    </tr>
+                    <tr>
+                      <th> Tax Amount</th>
+                      <td>{{purchase.taxamount}}</td>
+                    </tr>
+                    <tr>
+                      <th>Total Amount</th>
+                      <td>{{purchase.totalamount}}</td>
+                    </tr>
+                    <tr *ngIf="purchase.description">
+                      <th>Description</th>
+                      <td [innerHTML]="purchase.description | nl2br"></td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </mat-card-content>
               </mat-card>
             </mat-tab>
 
             <mat-tab label="Item List">
-
               <mat-card class="example-card">
                 <mat-card-content>
-
                   <table class="w-100 table-striped custom-data-table">
                     <tr>
                       <th>Item Name</th>
@@ -98,15 +85,12 @@
                       <td>{{purchaseitem.batchno}}</td>
                       <td>{{purchaseitem.domanufactured}}</td>
                       <td>{{purchaseitem.doexpired}}</td>
-
                     </tr>
                     </tbody>
                   </table>
-
                 </mat-card-content>
               </mat-card>
             </mat-tab>
-
           </mat-tab-group>
         </mat-card-content>
       </mat-card>

@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input} from '@angular/core';
 import {Customertype} from '../../../../../entities/customertype';
 import {MatDialog} from '@angular/material/dialog';
 import {FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
@@ -27,20 +27,13 @@ export class InventoryCustomertypeUpdateSubFormComponent extends AbstractSubForm
   @Input()
   customertypes: Customertype[] = [];
   inventories: Inventory[] = [];
-
-
-  constructor(protected dialog: MatDialog) {
-    super();
-  }
-
-  // Form related variables and functions
-
   fieldValidations = {
     price: [],
     customertype: [],
     inventory: [],
   };
 
+  // Form related variables and functions
   form = new FormGroup({
     id: new FormControl(null),
     price: new FormControl('', this.fieldValidations.price),
@@ -48,35 +41,40 @@ export class InventoryCustomertypeUpdateSubFormComponent extends AbstractSubForm
     customertype: new FormControl('', this.fieldValidations.customertype),
   });
 
-  get idField(): FormControl{
+  constructor(protected dialog: MatDialog) {
+    super();
+  }
+
+  get idField(): FormControl {
     return this.form.controls.id as FormControl;
   }
 
-  get priceField(): FormControl{
+  get priceField(): FormControl {
     return this.form.controls.price as FormControl;
   }
 
-  get customertypeField(): FormControl{
+  get customertypeField(): FormControl {
     return this.form.controls.customertype as FormControl;
   }
-  get inventoryField(): FormControl{
+
+  get inventoryField(): FormControl {
     return this.form.controls.inventory as FormControl;
   }
 
-  get isFormEmpty(): boolean{
+  get isFormEmpty(): boolean {
     return this.isEmptyField(this.idField)
-      &&   this.isEmptyField(this.priceField)
-      &&   this.isEmptyField(this.customertypeField);
+      && this.isEmptyField(this.priceField)
+      && this.isEmptyField(this.customertypeField);
   }
 
-  setValidations(): void{
-    this.fieldValidations.price = [ Validators.required ];
-    this.fieldValidations.customertype = [ Validators.required ];
-    this.fieldValidations.inventory = [ Validators.required ];
+  setValidations(): void {
+    this.fieldValidations.price = [Validators.required];
+    this.fieldValidations.customertype = [Validators.required];
+    this.fieldValidations.inventory = [Validators.required];
 
   }
 
-  removeValidations(): void{
+  removeValidations(): void {
     this.fieldValidations.price = [];
     this.fieldValidations.customertype = [];
     this.fieldValidations.inventory = [];
@@ -97,11 +95,10 @@ export class InventoryCustomertypeUpdateSubFormComponent extends AbstractSubForm
 
   }
 
-  resetForm(): void{
+  resetForm(): void {
     this.form.reset();
     this.removeValidations();
   }
-
 
 
   // Operations related functions
@@ -111,15 +108,17 @@ export class InventoryCustomertypeUpdateSubFormComponent extends AbstractSubForm
   }
 
   getUpdateConfirmMessage(dataItem: Inventorycustomertype): string {
-    if (this.isFormEmpty){
+    if (this.isFormEmpty) {
       return `Are you sure to update \u201C\u00A0${dataItem.price}\u00A0\u201D\u00A0?`;
     }
 
     return `Are you sure to update \u201C\u00A0${dataItem.price}\u00A0\u201D and discard existing form data\u00A0?`;
   }
 
-  addData(): void{
-    if (this.form.invalid) { return; }
+  addData(): void {
+    if (this.form.invalid) {
+      return;
+    }
 
     const dataItem: Inventorycustomertype = new Inventorycustomertype();
     dataItem.id = this.idField.value;

@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-md-7">
       <div class="sub-form-table-container" style="height: 240px;">
-        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No allowances to show</div>
+        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No records to show</div>
         <div *ngIf="dataList.length > 0" >
 
           <table class="w-100 mat-table">
             <thead>
             <tr>
               <th>Inventory item</th>
-              <th>Customertype</th>
+              <th>Customer type</th>
               <th>Price</th>
               <th></th>
               <th></th>
@@ -27,7 +27,7 @@
               </td>
               <td class="btn-col">
                 <button [disabled]="disabled" type="button" (click)="updateData(i, dataItem)" class="mat-btn-sm" mat-flat-button color="accent">
-                  <mat-icon>edit</mat-icon> Change
+                  <mat-icon>edit</mat-icon> Update
                 </button>
               </td>
             </tr>
@@ -37,13 +37,8 @@
       </div>
     </div>
 
-
-
     <div class="col-md-5">
       <form [formGroup]="form" (ngSubmit)="addData()">
-
-
-
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Inventory item</mat-label>
           <mat-select  formControlName="inventory">
@@ -55,9 +50,8 @@
           </mat-error>
         </mat-form-field>
 
-
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Customertype</mat-label>
+          <mat-label>Customer type</mat-label>
           <mat-select  formControlName="customertype">
             <mat-option [value]="null" selected disabled>Select a Customertype</mat-option>
             <mat-option *ngFor="let customertype of customertypes" [value]="customertype.id">{{customertype.name}}</mat-option>

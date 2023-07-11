@@ -19,15 +19,10 @@
                 </mat-select>
               </mat-form-field>
             </div>
-
-
-
-
           </div>
         </div>
         <div class="table-responsive" *ngIf="saleDataPage.totalElements > 0">
           <table mat-table [dataSource]="saleDataPage.content" class="w-100">
-
 
             <ng-container matColumnDef="code">
               <th mat-header-cell *matHeaderCellDef> Code </th>
@@ -57,7 +52,6 @@
                 <button (click)="delete(element)" class="mat-btn-sm" mat-flat-button color="warn"><mat-icon>delete</mat-icon> Delete</button>
               </td>
             </ng-container>
-
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Branch} from '../../../../entities/branch';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -74,46 +74,6 @@ export class BranchFormComponent extends AbstractComponent implements OnInit {
     ]),
   });
 
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get contact1Field(): FormControl{
-    return this.form.controls.contact1 as FormControl;
-  }
-
-  get contact2Field(): FormControl{
-    return this.form.controls.contact2 as FormControl;
-  }
-
-  get emailField(): FormControl{
-    return this.form.controls.email as FormControl;
-  }
-
-  get addressField(): FormControl{
-    return this.form.controls.address as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
-  get faxField(): FormControl{
-    return this.form.controls.fax as FormControl;
-  }
-
-  get dorecruiteField(): FormControl{
-    return this.form.controls.dorecruite as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private branchservice: BranchService,
     private branchstatusService: BranchstatusService,
@@ -125,6 +85,46 @@ export class BranchFormComponent extends AbstractComponent implements OnInit {
     super();
   }
 
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get contact1Field(): FormControl {
+    return this.form.controls.contact1 as FormControl;
+  }
+
+  get contact2Field(): FormControl {
+    return this.form.controls.contact2 as FormControl;
+  }
+
+  get emailField(): FormControl {
+    return this.form.controls.email as FormControl;
+  }
+
+  get addressField(): FormControl {
+    return this.form.controls.address as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get faxField(): FormControl {
+    return this.form.controls.fax as FormControl;
+  }
+
+  get dorecruiteField(): FormControl {
+    return this.form.controls.dorecruite as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
     this.loadData();
     this.refreshData();
@@ -133,11 +133,11 @@ export class BranchFormComponent extends AbstractComponent implements OnInit {
   loadData(): any {
     this.updatePrivileges();
 
-/*    if (!this.privilege.add){ return; } */
+    /*    if (!this.privilege.add){ return; } */
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -152,7 +152,9 @@ export class BranchFormComponent extends AbstractComponent implements OnInit {
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const branch: Branch = new Branch();
     branch.name = this.nameField.value;
@@ -163,13 +165,16 @@ export class BranchFormComponent extends AbstractComponent implements OnInit {
     branch.description = this.descriptionField.value;
     branch.dorecruite = DateHelper.getDateAsString(this.dorecruiteField.value);
     branch.fax = (this.faxField.value === '') ? null : this.faxField.value;
-    try{
+    try {
       const resourceLink: ResourceLink = await this.branchservice.add(branch);
       await this.router.navigateByUrl('/branches/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -180,22 +185,26 @@ export class BranchFormComponent extends AbstractComponent implements OnInit {
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -203,6 +212,10 @@ export class BranchFormComponent extends AbstractComponent implements OnInit {
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
   }
 
 }

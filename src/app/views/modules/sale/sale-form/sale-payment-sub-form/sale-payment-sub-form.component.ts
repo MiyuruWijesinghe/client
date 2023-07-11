@@ -1,6 +1,5 @@
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef} from '@angular/core';
 import {FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Inventory} from '../../../../../entities/inventory';
 import {MatDialog} from '@angular/material/dialog';
 import {AbstractSubFormComponent} from '../../../../../shared/ui-components/abstract-sub-form/abstract-sub-form.component';
 import {Salepayment} from '../../../../../entities/salepayment';
@@ -23,14 +22,6 @@ import {Salepayment} from '../../../../../entities/salepayment';
 })
 export class SalePaymentSubFormComponent extends AbstractSubFormComponent<Salepayment> {
 
-
-
-  constructor(protected dialog: MatDialog) {
-    super();
-  }
-
-  // Form related variables and functions
-
   fieldValidations = {
     pamount: [],
   };
@@ -39,25 +30,29 @@ export class SalePaymentSubFormComponent extends AbstractSubFormComponent<Salepa
     id: new FormControl(null),
     pamount: new FormControl('', this.fieldValidations.pamount),
   });
-  get idField(): FormControl{
+
+  constructor(protected dialog: MatDialog) {
+    super();
+  }
+
+  get idField(): FormControl {
     return this.form.controls.id as FormControl;
   }
 
-
-  get pamountField(): FormControl{
+  get pamountField(): FormControl {
     return this.form.controls.pamount as FormControl;
   }
 
-  get isFormEmpty(): boolean{
+  get isFormEmpty(): boolean {
     return this.isEmptyField(this.idField)
-      &&   this.isEmptyField(this.pamountField);
+      && this.isEmptyField(this.pamountField);
   }
 
-  setValidations(): void{
-    this.fieldValidations.pamount = [ Validators.required ];
+  setValidations(): void {
+    this.fieldValidations.pamount = [Validators.required];
   }
 
-  removeValidations(): void{
+  removeValidations(): void {
     this.fieldValidations.pamount = [];
   }
 
@@ -66,29 +61,27 @@ export class SalePaymentSubFormComponent extends AbstractSubFormComponent<Salepa
     this.pamountField.patchValue(dataItem.pamount);
   }
 
-  resetForm(): void{
+  resetForm(): void {
     this.form.reset();
     this.removeValidations();
   }
-
-
-
-  // Operations related functions
 
   getDeleteConfirmMessage(dataItem: Salepayment): string {
     return `Are you sure to remove \u201C ${dataItem.pamount} \u201D from allowance list ?`;
   }
 
   getUpdateConfirmMessage(dataItem: Salepayment): string {
-    if (this.isFormEmpty){
+    if (this.isFormEmpty) {
       return `Are you sure to update \u201C\u00A0${dataItem.pamount}\u00A0\u201D\u00A0?`;
     }
 
     return `Are you sure to update \u201C\u00A0${dataItem.pamount}\u00A0\u201D and discard existing form data\u00A0?`;
   }
 
-  addData(): void{
-    if (this.form.invalid) { return; }
+  addData(): void {
+    if (this.form.invalid) {
+      return;
+    }
 
     const dataItem: Salepayment = new Salepayment();
     dataItem.id = this.idField.value;
@@ -100,6 +93,5 @@ export class SalePaymentSubFormComponent extends AbstractSubFormComponent<Salepa
   customValidations(): object {
     return null;
   }
-
 
 }

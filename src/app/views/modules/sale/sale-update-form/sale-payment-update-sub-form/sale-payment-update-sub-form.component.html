@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-7">
       <div class="sub-form-table-container" style="height: 240px;">
-        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No allowances to show</div>
+        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No records to show</div>
         <div *ngIf="dataList.length > 0" >
 
           <table class="w-100 mat-table">
@@ -23,7 +23,7 @@
               </td>
               <td class="btn-col">
                 <button [disabled]="disabled" type="button" (click)="updateData(i, dataItem)" class="mat-btn-sm" mat-flat-button color="accent">
-                  <mat-icon>edit</mat-icon> Change
+                  <mat-icon>edit</mat-icon> Update
                 </button>
               </td>
             </tr>
@@ -48,7 +48,7 @@
         <div class="text-right mt-5 d-flex">
           <span class="spacer"></span>
           <button [disabled]="disabled" (click)="resetForm()" class="mat-btn-sm" mat-stroked-button type="button"><mat-icon>refresh</mat-icon> Clear </button>
-          <button [disabled]="disabled" (click)="setValidations()" class="mr-0 mat-btn-sm" mat-flat-button color="accent" type="submit"><mat-icon>save</mat-icon> ADD </button>
+          <button [disabled]="disabled" (click)="setValidations()" class="mr-0 mat-btn-sm" mat-flat-button color="accent" type="submit"><mat-icon>save</mat-icon> Add </button>
         </div>
       </form>
     </div>

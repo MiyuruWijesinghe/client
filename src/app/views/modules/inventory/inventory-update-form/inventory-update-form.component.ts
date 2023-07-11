@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Inventory} from '../../../../entities/inventory';
 import {Supplier} from '../../../../entities/supplier';
-import {Branch} from '../../../../entities/branch';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -12,15 +11,11 @@ import {ResourceLink} from '../../../../entities/resource-link';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {InventoryService} from '../../../../services/inventory.service';
 import {Customertype} from '../../../../entities/customertype';
-import {PorderItemUpdateSubFormComponent} from '../../porder/porder-update-form/porder-item-update-sub-form/porder-item-update-sub-form.component';
 import {InventoryCustomertypeUpdateSubFormComponent} from './inventory-customertype-update-sub-form/inventory-customertype-update-sub-form.component';
 import {CustomertypeService} from '../../../../services/customertype.service';
 import {Customer} from '../../../../entities/customer';
-import {Porder} from '../../../../entities/porder';
-import {Purchaseitem} from '../../../../entities/purchaseitem';
 import {PageRequest} from '../../../../shared/page-request';
 import {InventoryDataPage} from '../../../../entities/inventory-data-page';
-import {BranchDataPage} from '../../../../entities/branch-data-page';
 import {BranchService} from '../../../../services/branch.service';
 import {User, UserDataPage} from '../../../../entities/user';
 import {NotificationService} from '../../../../services/notification.service';
@@ -69,31 +64,6 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
     ]),
   });
 
-  get domanufacturedField(): FormControl{
-    return this.form.controls.domanufactured as FormControl;
-  }
-
-  get doexpiredField(): FormControl{
-    return this.form.controls.doexpired as FormControl;
-  }
-  get qtyField(): FormControl{
-    return this.form.controls.qty as FormControl;
-  }
-  get batchnoField(): FormControl{
-    return this.form.controls.batchno as FormControl;
-  }
-  get inventorycustomertypeField(): FormControl{
-    return this.form.controls.inventorycustomertype as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private inventoryService: InventoryService,
     private customertypeService: CustomertypeService,
@@ -107,13 +77,41 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
     super();
   }
 
+  get domanufacturedField(): FormControl {
+    return this.form.controls.domanufactured as FormControl;
+  }
+
+  get doexpiredField(): FormControl {
+    return this.form.controls.doexpired as FormControl;
+  }
+
+  get qtyField(): FormControl {
+    return this.form.controls.qty as FormControl;
+  }
+
+  get batchnoField(): FormControl {
+    return this.form.controls.batchno as FormControl;
+  }
+
+  get inventorycustomertypeField(): FormControl {
+    return this.form.controls.inventorycustomertype as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId =  + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
 
       this.customertypeService.getAll().then((data: Customer[]) => {
         this.customertypes = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -129,7 +127,7 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
 
     this.inventoryService.getAll(new PageRequest()).then((data: InventoryDataPage) => {
       this.inventories = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -140,7 +138,7 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -154,24 +152,36 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_INVENTORY);
   }
 
-  discardChanges(): void{
+  discardChanges(): void {
     this.inventorycustomertypeSubForm.resetForm();
     this.inventorycustomertypeField.markAsPristine();
     this.form.patchValue(this.inventory);
   }
 
-  setValues(): void{
-    if (this.doexpiredField.pristine){ this.doexpiredField.patchValue(this.inventory.doexpired); }
-    if (this.domanufacturedField.pristine){ this.domanufacturedField.patchValue(this.inventory.domanufactured); }
-    if (this.batchnoField.pristine){ this.batchnoField.patchValue(this.inventory.batchno); }
-    if (this.qtyField.pristine){ this.qtyField.patchValue(this.inventory.qty); }
-    if (this.inventorycustomertypeField.pristine){ this.inventorycustomertypeField.patchValue(this.inventory.inventorycustomertypeList); }
+  setValues(): void {
+    if (this.doexpiredField.pristine) {
+      this.doexpiredField.patchValue(this.inventory.doexpired);
+    }
+    if (this.domanufacturedField.pristine) {
+      this.domanufacturedField.patchValue(this.inventory.domanufactured);
+    }
+    if (this.batchnoField.pristine) {
+      this.batchnoField.patchValue(this.inventory.batchno);
+    }
+    if (this.qtyField.pristine) {
+      this.qtyField.patchValue(this.inventory.qty);
+    }
+    if (this.inventorycustomertypeField.pristine) {
+      this.inventorycustomertypeField.patchValue(this.inventory.inventorycustomertypeList);
+    }
   }
 
   async submit(): Promise<void> {
     this.inventorycustomertypeSubForm.resetForm();
     this.inventorycustomertypeField.markAsDirty();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
     const newInventory: Inventory = new Inventory();
 
     newInventory.qty = this.qtyField.value;
@@ -181,12 +191,13 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
     newInventory.inventorycustomertypeList = this.inventorycustomertypeField.value;
 
 
-    try{
+    try {
       const resourceLink: ResourceLink = await this.inventoryService.update(this.inventory.id, newInventory);
       await this.router.navigateByUrl('/inventories/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 403:
           this.snackBar.open(e.error.message, null, {duration: 2000});
           setTimeout(() => {
@@ -203,22 +214,26 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -228,4 +243,7 @@ export class InventoryUpdateFormComponent extends AbstractComponent implements O
     }
   }
 
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
+  }
 }

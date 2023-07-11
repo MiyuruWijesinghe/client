@@ -1,25 +1,20 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Purchase} from '../../../../entities/purchase';
 import {Branch} from '../../../../entities/branch';
-import {Supplier} from '../../../../entities/supplier';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {PurchaseService} from '../../../../services/purchase.service';
 import {BranchService} from '../../../../services/branch.service';
-import {SupplierService} from '../../../../services/supplier.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {PageRequest} from '../../../../shared/page-request';
 import {BranchDataPage} from '../../../../entities/branch-data-page';
-import {SupplierDataPage} from '../../../../entities/supplier-data-page';
 import {LoggedUser} from '../../../../shared/logged-user';
 import {UsecaseList} from '../../../../usecase-list';
-import {DateHelper} from '../../../../shared/date-helper';
 import {ResourceLink} from '../../../../entities/resource-link';
 import {Porder} from '../../../../entities/porder';
 import {PorderService} from '../../../../services/porder.service';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {PorderDataPage} from '../../../../entities/porder-data-page';
-import {PorderItemSubFormComponent} from '../../porder/porder-form/porder-item-sub-form/porder-item-sub-form.component';
 import {PurchaseItemSubFormComponent} from './purchase-item-sub-form/purchase-item-sub-form.component';
 import {Item} from '../../../../entities/item';
 import {ItemService} from '../../../../services/item.service';
@@ -44,7 +39,6 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
   systemUsers: User[] = [];
 
   form = new FormGroup({
-
     description: new FormControl('', [
       Validators.maxLength(65535),
     ]),
@@ -76,37 +70,6 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
     ]),
   });
 
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
-  get porderField(): FormControl{
-    return this.form.controls.porder as FormControl;
-  }
-  get branchField(): FormControl{
-    return this.form.controls.branch as FormControl;
-  }
-  get amountField(): FormControl{
-    return this.form.controls.amount as FormControl;
-  }
-  get taxAmountField(): FormControl{
-    return this.form.controls.taxamount as FormControl;
-  }
-  get totalAmountField(): FormControl{
-    return this.form.controls.totalamount as FormControl;
-  }
-  get purchaseitemField(): FormControl{
-    return this.form.controls.purchaseitem as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private porderService: PorderService,
     private purchaseService: PurchaseService,
@@ -120,11 +83,47 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
     super();
   }
 
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get porderField(): FormControl {
+    return this.form.controls.porder as FormControl;
+  }
+
+  get branchField(): FormControl {
+    return this.form.controls.branch as FormControl;
+  }
+
+  get amountField(): FormControl {
+    return this.form.controls.amount as FormControl;
+  }
+
+  get taxAmountField(): FormControl {
+    return this.form.controls.taxamount as FormControl;
+  }
+
+  get totalAmountField(): FormControl {
+    return this.form.controls.totalamount as FormControl;
+  }
+
+  get purchaseitemField(): FormControl {
+    return this.form.controls.purchaseitem as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
 
     this.itemService.getAll(new PageRequest()).then((data: ItemDataPage) => {
       this.items = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -134,37 +133,39 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
 
   loadData(): any {
     this.updatePrivileges();
-    if (!this.privilege.add){ return; }
+    if (!this.privilege.add) {
+      return;
+    }
 
     this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
       this.branches = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
   }
 
-  getPurchaseOrders(): void{
+  getPurchaseOrders(): void {
     const pageRequest = new PageRequest();
     pageRequest.addSearchCriteria('branch', this.branchField.value);
     pageRequest.addSearchCriteria('porderstatus', '1');
 
     this.porderService.getAll(pageRequest).then((data: PorderDataPage) => {
       this.porders = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
   }
 
-    updatePrivileges(): any {
+  updatePrivileges(): any {
     this.privilege.add = LoggedUser.can(UsecaseList.ADD_PURCHASE);
     this.privilege.showAll = LoggedUser.can(UsecaseList.GET_ALL_PURCHASES);
     this.privilege.showOne = LoggedUser.can(UsecaseList.GET_PURCHASE);
@@ -175,7 +176,9 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
   async submit(): Promise<void> {
     this.purchaseitemSubForm.resetForm();
     this.purchaseitemField.markAsDirty();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const purchase: Purchase = new Purchase();
     purchase.description = this.descriptionField.value;
@@ -186,14 +189,16 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
     purchase.porder = this.porderField.value;
     purchase.purchaseitemList = this.purchaseitemField.value;
 
-
-    try{
+    try {
       const resourceLink: ResourceLink = await this.purchaseService.add(purchase);
       await this.router.navigateByUrl('/purchases/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -205,14 +210,14 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
 
   getOrderedItems(): void {
     let selectedPOrder: Porder = null;
-    for (const item of this.porders){
-      if (item.id === this.porderField.value){
+    for (const item of this.porders) {
+      if (item.id === this.porderField.value) {
         selectedPOrder = item;
       }
     }
 
     const purchaseItems: Purchaseitem[] = [];
-    for (const item of selectedPOrder.porderitemList){
+    for (const item of selectedPOrder.porderitemList) {
       const p = new Purchaseitem();
       p.item = item.item;
       p.qty = item.qty;
@@ -222,47 +227,51 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
 
   }
 
-  calculateAmount(): void{
-    if (!this.porderField.valid){
+  calculateAmount(): void {
+    if (!this.porderField.valid) {
       return;
     }
 
     let totalAmount = 0;
     let taxAmount = 0;
     let totalAmountandTax = 0;
-    for (const item of this.purchaseitemField.value){
-     totalAmount += item.unitprice * item.qty;
-     taxAmount = totalAmount * 0.1;
-     totalAmountandTax = totalAmount + taxAmount;
+    for (const item of this.purchaseitemField.value) {
+      totalAmount += item.unitprice * item.qty;
+      taxAmount = totalAmount * 0.1;
+      totalAmountandTax = totalAmount + taxAmount;
     }
-    if (!isNaN(totalAmountandTax)){
+    if (!isNaN(totalAmountandTax)) {
       this.totalAmountField.patchValue(totalAmountandTax);
     }
-    if (!isNaN(totalAmount)){
+    if (!isNaN(totalAmount)) {
       this.amountField.patchValue(totalAmount);
     }
-    if (!isNaN(taxAmount)){
+    if (!isNaN(taxAmount)) {
       this.taxAmountField.patchValue(taxAmount);
     }
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -270,5 +279,9 @@ export class PurchaseFormComponent extends AbstractComponent implements OnInit {
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
   }
 }

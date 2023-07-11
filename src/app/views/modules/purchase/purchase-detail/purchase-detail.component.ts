@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Purchase} from '../../../../entities/purchase';
 import {PurchaseService} from '../../../../services/purchase.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -28,9 +28,9 @@ export class PurchaseDetailComponent extends AbstractComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId = + params.get('id');
-      try{
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
+      try {
         await this.loadData();
       } finally {
         this.initialLoaded();
@@ -39,14 +39,16 @@ export class PurchaseDetailComponent extends AbstractComponent implements OnInit
     });
   }
 
-  async delete(): Promise<void>{
+  async delete(): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: this.purchase.code}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.purchaseService.delete(this.purchase.id);
       await this.router.navigateByUrl('/purchases');

@@ -10,7 +10,6 @@ import {Salepayment} from '../../../../entities/salepayment';
 import {Sale} from '../../../../entities/sale';
 import {SaleService} from '../../../../services/sale.service';
 import {SaleitemService} from '../../../../services/saleitem.service';
-import {SalepaymentService} from '../../../../services/salepayment.service';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {SaleItemSubFormComponent} from './sale-item-sub-form/sale-item-sub-form.component';
 import {SalePaymentSubFormComponent} from './sale-payment-sub-form/sale-payment-sub-form.component';
@@ -27,7 +26,6 @@ import {BranchService} from '../../../../services/branch.service';
 import {Item} from '../../../../entities/item';
 import {ItemService} from '../../../../services/item.service';
 import {ItemDataPage} from '../../../../entities/item-data-page';
-import {PorderDataPage} from '../../../../entities/porder-data-page';
 import {User, UserDataPage} from '../../../../entities/user';
 import {NotificationService} from '../../../../services/notification.service';
 import {UserService} from '../../../../services/user.service';
@@ -62,7 +60,7 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
       Validators.required
     ]),
     saleitems: new FormControl(),
-  //  salepayments: new FormControl(),
+    //  salepayments: new FormControl(),
     customer: new FormControl(),
     branch: new FormControl()
 
@@ -76,41 +74,6 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
       Validators.required
     ]),
   });
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-  get amountField(): FormControl{
-    return this.form.controls.amount as FormControl;
-  }
-
-  /*get totalField(): FormControl{
-    return this.form.controls.total as FormControl;
-  }
-  get discountField(): FormControl{
-    return this.form.controls.discount as FormControl;
-  }*/
-
-  get saleitemsField(): FormControl{
-    return this.form.controls.saleitems as FormControl;
-  }
-  /*get salepaymentsField(): FormControl{
-    return this.form.controls.salepayments as FormControl;
-  }*/
-  get customerField(): FormControl{
-    return this.form.controls.customer as FormControl;
-  }
-  get branchField(): FormControl{
-    return this.form.controls.branch as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
 
   constructor(
     private saleService: SaleService,
@@ -128,21 +91,48 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
     super();
   }
 
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get amountField(): FormControl {
+    return this.form.controls.amount as FormControl;
+  }
+
+  get saleitemsField(): FormControl {
+    return this.form.controls.saleitems as FormControl;
+  }
+
+  get customerField(): FormControl {
+    return this.form.controls.customer as FormControl;
+  }
+
+  get branchField(): FormControl {
+    return this.form.controls.branch as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
     this.inventoryService.getAll(new PageRequest()).then((data: InventoryDataPage) => {
       this.inventories = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.itemService.getAll(new PageRequest()).then((data: ItemDataPage) => {
       this.items = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
-
 
     this.loadData();
     this.refreshData();
@@ -157,24 +147,23 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
 
     this.customerService.getAll(new PageRequest()).then((data: CustomerDataPage) => {
       this.customers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
     this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
       this.branches = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
   }
-
 
   updatePrivileges(): any {
     this.privilege.add = LoggedUser.can(UsecaseList.ADD_SALE);
@@ -189,10 +178,11 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
     this.saleitemSubForm.resetForm();
     this.saleitemsField.markAsDirty();
 
-
-   // this.salepaymentSubForm.resetForm();
+    // this.salepaymentSubForm.resetForm();
     // this.salepaymentsField.markAsDirty();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const sale: Sale = new Sale();
     // sale.contact2 = (this.contact2Field.value === '') ? null : this.contact2Field.value;
@@ -205,14 +195,16 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
     sale.customer = this.customerField.value;
     sale.branch = this.branchField.value;
 
-
-    try{
+    try {
       const resourceLink: ResourceLink = await this.saleService.add(sale);
       await this.router.navigateByUrl('/sales/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -238,46 +230,41 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
     }
   }
 
-    // const saleitems: Saleitem[] = [];
-    // for (const item of selectedBranch.itembranchList) {
-    //   const p = new Saleitem();
-    //   p.item = item.item;
-    //   saleitems.push(p);
-    // }
-    // this.saleitemsField.patchValue(saleitems);
-
-
-  calculateAmount(): void{
-    if (!this.saleitemsField.valid){
+  calculateAmount(): void {
+    if (!this.saleitemsField.valid) {
       return;
     }
 
     let totalAmount = 0;
-    for (const item of this.saleitemsField.value){
+    for (const item of this.saleitemsField.value) {
       totalAmount += item.unitprice * item.qty;
     }
-    if (!isNaN(totalAmount)){
+    if (!isNaN(totalAmount)) {
       this.amountField.patchValue(totalAmount);
     }
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -285,6 +272,10 @@ export class SaleFormComponent extends AbstractComponent implements OnInit {
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({value: '', disabled: false}, {emitEvent: false});
   }
 
 }

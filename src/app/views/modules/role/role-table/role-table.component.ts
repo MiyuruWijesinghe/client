@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {Role, RoleDataPage} from '../../../../entities/role';
 import {FormControl} from '@angular/forms';
@@ -22,7 +22,6 @@ export class RoleTableComponent extends AbstractComponent implements OnInit {
   pageSize = 5;
   pageIndex = 0;
 
-
   nameField = new FormControl();
 
   constructor(
@@ -41,19 +40,21 @@ export class RoleTableComponent extends AbstractComponent implements OnInit {
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.showAll) { return; }
+    if (!this.privilege.showAll) {
+      return;
+    }
 
     this.setDisplayedColumns();
 
     const pageRequest = new PageRequest();
-    pageRequest.pageIndex  = this.pageIndex;
-    pageRequest.pageSize  = this.pageSize;
+    pageRequest.pageIndex = this.pageIndex;
+    pageRequest.pageSize = this.pageSize;
 
     pageRequest.addSearchCriteria('name', this.nameField.value);
 
     this.roleService.getAll(pageRequest).then((page: RoleDataPage) => {
       this.roleDataPage = page;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -67,31 +68,39 @@ export class RoleTableComponent extends AbstractComponent implements OnInit {
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_ROLE);
   }
 
-  setDisplayedColumns(): void{
+  setDisplayedColumns(): void {
     this.displayedColumns = ['name', 'usercount'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
-    if (this.privilege.update) { this.displayedColumns.push('update-col'); }
-    if (this.privilege.delete) { this.displayedColumns.push('delete-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(role: Role): Promise<void>{
+  async delete(role: Role): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: role.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
       try {
         await this.roleService.delete(role.id);
-      }catch (e) {
+      } catch (e) {
         this.snackBar.open(e.error.message, null, {duration: 4000});
       }
       this.loadData();

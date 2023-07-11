@@ -2,10 +2,7 @@
 <app-object-not-found *ngIf="loaded && !porder" message="Porder Not Found"></app-object-not-found>
 <app-loading *ngIf="!loaded"></app-loading>
 <div *ngIf="porder && privilege.showOne">
-  <app-page-header
-    title="Purchase Order Detail Page of {{ this.porder.code }}"
-    [breadcrumbSegments]="['Purchase Orders', 'Show All Purchase Orders', 'Details of ' + this.porder.code]"
-  ></app-page-header>
+  <app-page-header title="Purchase Order Detail Page of {{ this.porder.code }}" [breadcrumbSegments]="['Purchase Orders', 'Show All Purchase Orders', 'Details of ' + this.porder.code]"></app-page-header>
   <div class="row">
     <div class="col-md-4">
       <mat-card class="example-card">
@@ -34,59 +31,51 @@
       </mat-card>
     </div>
     <div class="col-md-8">
-      <mat-card >
+      <mat-card>
         <mat-card-content style="min-height: 400px">
-
           <mat-tab-group>
             <mat-tab label="Purchase Order">
-
               <mat-card class="example-card">
                 <mat-card-content>
-
-          <table class="w-100 table-striped custom-data-table">
-            <tbody>
-
-            <tr>
-              <th>Branch</th>
-              <td>{{porder.branch.name}}</td>
-            </tr>
-                     <tr>
-              <th>Supplier</th>
-              <td>{{porder.supplier.name}}</td>
-            </tr>
-            <tr>
-              <th>Date of Ordered</th>
-              <td [innerHTML]="porder.doordered | date"></td>
-            </tr>
-            <tr>
-              <th>Date of Required</th>
-              <td [innerHTML]="porder.dorequired | date"></td>
-            </tr>
-
-            <tr>
-              <th>Date of Accepted</th>
-              <td [innerHTML]="porder.dorecieved | date"></td>
-            </tr>
-
-            <tr *ngIf="porder.description">
-              <th>Description</th>
-              <td [innerHTML]="porder.description | nl2br"></td>
-            </tr>
-            <tr>
-              <th>Porder Status</th>
-              <td>{{porder.porderstatus.name}}</td>
-            </tr>
-            </tbody>
-          </table>
+                  <table class="w-100 table-striped custom-data-table">
+                    <tbody>
+                    <tr>
+                      <th>Branch</th>
+                      <td>{{porder.branch.name}}</td>
+                    </tr>
+                    <tr>
+                      <th>Supplier</th>
+                      <td>{{porder.supplier.name}}</td>
+                    </tr>
+                    <tr>
+                      <th>Date of Ordered</th>
+                      <td [innerHTML]="porder.doordered | date"></td>
+                    </tr>
+                    <tr>
+                      <th>Date of Required</th>
+                      <td [innerHTML]="porder.dorequired | date"></td>
+                    </tr>
+                    <tr>
+                      <th>Date of Accepted</th>
+                      <td [innerHTML]="porder.dorecieved | date"></td>
+                    </tr>
+                    <tr *ngIf="porder.description">
+                      <th>Description</th>
+                      <td [innerHTML]="porder.description | nl2br"></td>
+                    </tr>
+                    <tr>
+                      <th>Porder Status</th>
+                      <td>{{porder.porderstatus.name}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </mat-card-content>
               </mat-card>
             </mat-tab>
 
             <mat-tab label="Item List">
-
               <mat-card class="example-card">
                 <mat-card-content>
-
                   <table class="w-100 table-striped custom-data-table">
                     <tr>
                       <th>Item Name</th>
@@ -96,15 +85,12 @@
                     <tr *ngFor="let porderitem of porder.porderitemList">
                       <td>{{porderitem.item.name}}</td>
                       <td>{{porderitem.qty}}</td>
-
                     </tr>
                     </tbody>
                   </table>
-
                 </mat-card-content>
               </mat-card>
             </mat-tab>
-
           </mat-tab-group>
         </mat-card-content>
       </mat-card>

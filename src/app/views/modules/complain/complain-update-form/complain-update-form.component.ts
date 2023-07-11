@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Complain} from '../../../../entities/complain';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -54,31 +54,6 @@ export class ComplainUpdateFormComponent extends AbstractComponent implements On
     ]),
   });
 
-
-
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get nicField(): FormControl{
-    return this.form.controls.nic as FormControl;
-  }
-
-  get contactField(): FormControl{
-    return this.form.controls.contact as FormControl;
-  }
-    get addressField(): FormControl{
-    return this.form.controls.address as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-  get itemField(): FormControl{
-    return this.form.controls.item as FormControl;
-  }
-
-
   constructor(
     private route: ActivatedRoute,
     private complainService: ComplainService,
@@ -89,9 +64,33 @@ export class ComplainUpdateFormComponent extends AbstractComponent implements On
     super();
   }
 
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get nicField(): FormControl {
+    return this.form.controls.nic as FormControl;
+  }
+
+  get contactField(): FormControl {
+    return this.form.controls.contact as FormControl;
+  }
+
+  get addressField(): FormControl {
+    return this.form.controls.address as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get itemField(): FormControl {
+    return this.form.controls.item as FormControl;
+  }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId =  + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
       await this.loadData();
       this.refreshData();
     });
@@ -102,7 +101,7 @@ export class ComplainUpdateFormComponent extends AbstractComponent implements On
 
     this.itemService.getAll(new PageRequest()).then((data: ItemDataPage) => {
       this.items = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -120,7 +119,9 @@ export class ComplainUpdateFormComponent extends AbstractComponent implements On
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
     const newComplain: Complain = new Complain();
     newComplain.name = this.nameField.value;
     newComplain.nic = this.nicField.value;
@@ -129,12 +130,13 @@ export class ComplainUpdateFormComponent extends AbstractComponent implements On
     newComplain.item = this.itemField.value;
     newComplain.description = this.descriptionField.value;
 
-    try{
+    try {
       const resourceLink: ResourceLink = await this.complainService.update(this.complain.id, newComplain);
       await this.router.navigateByUrl('/complains/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 403:
           this.snackBar.open(e.error.message, null, {duration: 2000});
           setTimeout(() => {
@@ -151,16 +153,28 @@ export class ComplainUpdateFormComponent extends AbstractComponent implements On
 
   }
 
-  discardChanges(): void{
+  discardChanges(): void {
     this.form.patchValue(this.complain);
   }
 
-  setValues(): void{
-    if (this.nameField.pristine){ this.nameField.patchValue(this.complain.name); }
-    if (this.nicField.pristine){ this.nicField.patchValue(this.complain.nic); }
-    if (this.contactField.pristine){ this.contactField.patchValue(this.complain.contact); }
-    if (this.addressField.pristine){ this.addressField.patchValue(this.complain.address); }
-    if (this.itemField.pristine){ this.itemField.patchValue(this.complain.item.id); }
-    if (this.descriptionField.pristine){ this.descriptionField.patchValue(this.complain.description); }
+  setValues(): void {
+    if (this.nameField.pristine) {
+      this.nameField.patchValue(this.complain.name);
+    }
+    if (this.nicField.pristine) {
+      this.nicField.patchValue(this.complain.nic);
+    }
+    if (this.contactField.pristine) {
+      this.contactField.patchValue(this.complain.contact);
+    }
+    if (this.addressField.pristine) {
+      this.addressField.patchValue(this.complain.address);
+    }
+    if (this.itemField.pristine) {
+      this.itemField.patchValue(this.complain.item.id);
+    }
+    if (this.descriptionField.pristine) {
+      this.descriptionField.patchValue(this.complain.description);
+    }
   }
 }

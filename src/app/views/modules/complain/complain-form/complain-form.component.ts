@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ComplainService} from '../../../../services/complain.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -10,7 +10,6 @@ import {ResourceLink} from '../../../../entities/resource-link';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {Item} from '../../../../entities/item';
 import {PageRequest} from '../../../../shared/page-request';
-import {BranchDataPage} from '../../../../entities/branch-data-page';
 import {ItemDataPage} from '../../../../entities/item-data-page';
 import {ItemService} from '../../../../services/item.service';
 
@@ -55,29 +54,6 @@ export class ComplainFormComponent extends AbstractComponent implements OnInit {
     ]),
   });
 
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get nicField(): FormControl{
-    return this.form.controls.nic as FormControl;
-  }
-
-  get contactField(): FormControl{
-    return this.form.controls.contact as FormControl;
-  }
-
-  get addressField(): FormControl{
-    return this.form.controls.address as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-  get itemField(): FormControl{
-    return this.form.controls.item as FormControl;
-  }
-
   constructor(
     private complainService: ComplainService,
     private itemService: ItemService,
@@ -85,6 +61,30 @@ export class ComplainFormComponent extends AbstractComponent implements OnInit {
     private router: Router
   ) {
     super();
+  }
+
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get nicField(): FormControl {
+    return this.form.controls.nic as FormControl;
+  }
+
+  get contactField(): FormControl {
+    return this.form.controls.contact as FormControl;
+  }
+
+  get addressField(): FormControl {
+    return this.form.controls.address as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get itemField(): FormControl {
+    return this.form.controls.item as FormControl;
   }
 
   ngOnInit(): void {
@@ -97,7 +97,7 @@ export class ComplainFormComponent extends AbstractComponent implements OnInit {
 
     this.itemService.getAll(new PageRequest()).then((data: ItemDataPage) => {
       this.items = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -113,7 +113,9 @@ export class ComplainFormComponent extends AbstractComponent implements OnInit {
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const complain: Complain = new Complain();
     complain.name = this.nameField.value;
@@ -123,13 +125,16 @@ export class ComplainFormComponent extends AbstractComponent implements OnInit {
     complain.description = this.descriptionField.value;
     complain.item = this.itemField.value;
 
-    try{
+    try {
       const resourceLink: ResourceLink = await this.complainService.add(complain);
       await this.router.navigateByUrl('/complains/' + resourceLink.id);
-    }catch (c) {
+    } catch (c) {
       switch (c.status) {
-        case 401: break;
-        case 403: this.snackBar.open(c.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(c.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -137,9 +142,6 @@ export class ComplainFormComponent extends AbstractComponent implements OnInit {
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
-
-
-
   }
 
 }

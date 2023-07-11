@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Branch} from '../../../../entities/branch';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -10,12 +10,11 @@ import {ResourceLink} from '../../../../entities/resource-link';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {BranchstatusService} from '../../../../services/branchstatus.service';
 import {Branchstatus} from '../../../../entities/branchstatus';
-import {DateHelper} from '../../../../shared/date-helper';
 import {Notification} from '../../../../entities/notification';
 import {User, UserDataPage} from '../../../../entities/user';
 import {NotificationService} from '../../../../services/notification.service';
 import {UserService} from '../../../../services/user.service';
-import {PageRequest} from "../../../../shared/page-request";
+import {PageRequest} from '../../../../shared/page-request';
 
 @Component({
   selector: 'app-branch-update-form',
@@ -26,7 +25,6 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
 
   selectedId: number;
   branch: Branch;
-
   branchstatuses: Branchstatus[] = [];
   systemUsers: User[] = [];
 
@@ -79,46 +77,6 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
     ]),
   });
 
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get contact1Field(): FormControl{
-    return this.form.controls.contact1 as FormControl;
-  }
-
-  get contact2Field(): FormControl{
-    return this.form.controls.contact2 as FormControl;
-  }
-
-  get emailField(): FormControl{
-    return this.form.controls.email as FormControl;
-  }
-
-  get addressField(): FormControl{
-    return this.form.controls.address as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
-  get faxField(): FormControl{
-    return this.form.controls.fax as FormControl;
-  }
-
-  get branchstatusField(): FormControl{
-    return this.form.controls.branchstatus as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private route: ActivatedRoute,
     private branchService: BranchService,
@@ -131,9 +89,49 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
     super();
   }
 
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get contact1Field(): FormControl {
+    return this.form.controls.contact1 as FormControl;
+  }
+
+  get contact2Field(): FormControl {
+    return this.form.controls.contact2 as FormControl;
+  }
+
+  get emailField(): FormControl {
+    return this.form.controls.email as FormControl;
+  }
+
+  get addressField(): FormControl {
+    return this.form.controls.address as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get faxField(): FormControl {
+    return this.form.controls.fax as FormControl;
+  }
+
+  get branchstatusField(): FormControl {
+    return this.form.controls.branchstatus as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId =  + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
       await this.loadData();
       this.refreshData();
       this.loadDropDownData();
@@ -143,14 +141,18 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.update){ return; }
+    if (!this.privilege.update) {
+      return;
+    }
 
-    if (!this.privilege.update){ return; }
+    if (!this.privilege.update) {
+      return;
+    }
 
     if (this.branchstatusField.pristine) {
       this.branchstatusService.getAll().then((data: Branchstatus[]) => {
         this.branchstatuses = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -163,7 +165,7 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
   loadDropDownData(): any {
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -178,7 +180,9 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
     const newBranch: Branch = new Branch();
     newBranch.name = this.nameField.value;
     newBranch.contact1 = this.contact1Field.value;
@@ -190,12 +194,13 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
     newBranch.branchstatus = this.branchstatusField.value;
 
 
-    try{
+    try {
       const resourceLink: ResourceLink = await this.branchService.update(this.branch.id, newBranch);
       await this.router.navigateByUrl('/branches/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 403:
           this.snackBar.open(e.error.message, null, {duration: 2000});
           setTimeout(() => {
@@ -212,38 +217,58 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
 
   }
 
-  discardChanges(): void{
+  discardChanges(): void {
     this.form.patchValue(this.branch);
   }
 
-  setValues(): void{
-    if (this.nameField.pristine){ this.nameField.patchValue(this.branch.name); }
-    if (this.contact1Field.pristine){ this.contact1Field.patchValue(this.branch.contact1); }
-    if (this.contact2Field.pristine){ this.contact2Field.patchValue(this.branch.contact2); }
-    if (this.emailField.pristine){ this.emailField.patchValue(this.branch.email); }
-    if (this.faxField.pristine){ this.faxField.patchValue(this.branch.fax); }
-    if (this.branchstatusField.pristine){ this.branchstatusField.patchValue(this.branch.branchstatus.id); }
-    if (this.addressField.pristine){ this.addressField.patchValue(this.branch.address); }
-    if (this.descriptionField.pristine){ this.descriptionField.patchValue(this.branch.description); }
+  setValues(): void {
+    if (this.nameField.pristine) {
+      this.nameField.patchValue(this.branch.name);
+    }
+    if (this.contact1Field.pristine) {
+      this.contact1Field.patchValue(this.branch.contact1);
+    }
+    if (this.contact2Field.pristine) {
+      this.contact2Field.patchValue(this.branch.contact2);
+    }
+    if (this.emailField.pristine) {
+      this.emailField.patchValue(this.branch.email);
+    }
+    if (this.faxField.pristine) {
+      this.faxField.patchValue(this.branch.fax);
+    }
+    if (this.branchstatusField.pristine) {
+      this.branchstatusField.patchValue(this.branch.branchstatus.id);
+    }
+    if (this.addressField.pristine) {
+      this.addressField.patchValue(this.branch.address);
+    }
+    if (this.descriptionField.pristine) {
+      this.descriptionField.patchValue(this.branch.description);
+    }
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -253,4 +278,7 @@ export class BranchUpdateFormComponent extends AbstractComponent implements OnIn
     }
   }
 
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
+  }
 }

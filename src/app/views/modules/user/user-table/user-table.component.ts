@@ -24,22 +24,9 @@ export class UserTableComponent extends AbstractComponent implements OnInit {
   pageSize = 5;
   pageIndex = 0;
 
-
   usernameField = new FormControl();
   statusField = new FormControl();
   displayNameField = new FormControl();
-
-  getDisplayName(user: User): string{
-    return User.getDisplayName(user);
-  }
-
-  get canResetPassword(): boolean{
-    return LoggedUser.can(UsecaseList.RESET_USER_PASSWORDS);
-  }
-
-  get thumbnailURL(): string{
-    return ApiManager.getURL('files/thumbnail/');
-  }
 
   constructor(
     private userService: UserService,
@@ -47,6 +34,18 @@ export class UserTableComponent extends AbstractComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     super();
+  }
+
+  get canResetPassword(): boolean {
+    return LoggedUser.can(UsecaseList.RESET_USER_PASSWORDS);
+  }
+
+  get thumbnailURL(): string {
+    return ApiManager.getURL('files/thumbnail/');
+  }
+
+  getDisplayName(user: User): string {
+    return User.getDisplayName(user);
   }
 
   async ngOnInit(): Promise<void> {
@@ -57,13 +56,15 @@ export class UserTableComponent extends AbstractComponent implements OnInit {
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.showAll) { return; }
+    if (!this.privilege.showAll) {
+      return;
+    }
 
     this.setDisplayedColumns();
 
     const pageRequest = new PageRequest();
-    pageRequest.pageIndex  = this.pageIndex;
-    pageRequest.pageSize  = this.pageSize;
+    pageRequest.pageIndex = this.pageIndex;
+    pageRequest.pageSize = this.pageSize;
 
     pageRequest.addSearchCriteria('username', this.usernameField.value);
     pageRequest.addSearchCriteria('userstatus', this.statusField.value);
@@ -71,7 +72,7 @@ export class UserTableComponent extends AbstractComponent implements OnInit {
 
     this.userService.getAll(pageRequest).then((page: UserDataPage) => {
       this.userDataPage = page;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -85,39 +86,49 @@ export class UserTableComponent extends AbstractComponent implements OnInit {
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_USER);
   }
 
-  setDisplayedColumns(): void{
+  setDisplayedColumns(): void {
     this.displayedColumns = ['photo', 'username', 'displayname', 'status'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
-    if (this.privilege.update) { this.displayedColumns.push('update-col'); }
-    if (this.privilege.delete) { this.displayedColumns.push('delete-col'); }
-    if (this.canResetPassword) { this.displayedColumns.push('reset-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
+    if (this.canResetPassword) {
+      this.displayedColumns.push('reset-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(user: User): Promise<void>{
+  async delete(user: User): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: User.getDisplayName(user)}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
       try {
         await this.userService.delete(user.id);
-      }catch (e) {
+      } catch (e) {
         this.snackBar.open(e.error.message, null, {duration: 4000});
       }
       this.loadData();
     });
   }
 
-  resetPassword(user: User): void{
+  resetPassword(user: User): void {
     const dialogRef = this.dialog.open(ResetPasswordComponent, {
       width: '350px',
       data: {user}

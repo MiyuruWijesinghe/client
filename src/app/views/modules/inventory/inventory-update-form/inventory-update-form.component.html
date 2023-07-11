@@ -1,4 +1,4 @@
-<app-no-privilege *ngIf="!privilege.update" message="No privilege to change inventory detalis"></app-no-privilege>
+<app-no-privilege *ngIf="!privilege.update" message="No privilege to change inventory details"></app-no-privilege>
 <div *ngIf="this.inventory && privilege.update">
   <app-page-header title="Update Inventory" [breadcrumbSegments]="['Inventory', 'Update Inventory']"></app-page-header>
   <div class="row">
@@ -11,11 +11,11 @@
               <div class="row">
                 <div class="col-md-6">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Qty</mat-label>
+                    <mat-label>Quantity</mat-label>
                     <input matInput formControlName="qty" required>
                     <mat-hint>Ex: 900</mat-hint>
                     <mat-error *ngIf="qtyField.invalid">
-                      <span *ngIf="qtyField.errors.required">Qty is required</span>
+                      <span *ngIf="qtyField.errors.required">Quantity is required</span>
                     </mat-error>
                   </mat-form-field>
 
@@ -78,8 +78,6 @@
               </tbody>
             </table>
 
-
-
             <h3 class="mb-0 mat-subheading-1 font-weight-light">Granted Items</h3>
             <app-inventory-customertype-update-sub-form [min]="1"  [customertypes]="customertypes" formControlName="inventorycustomertype"></app-inventory-customertype-update-sub-form>
             <div class="error-box" *ngIf="inventorycustomertypeField.invalid && !inventorycustomertypeField.pristine">
@@ -90,7 +88,7 @@
               <button *ngIf="privilege.showAll" routerLink="/inventories" class="ml-0" mat-raised-button color="primary"><mat-icon>list</mat-icon> All Inventories</button>
               <span class="spacer"></span>
               <button mat-stroked-button type="button" (click)="discardChanges()"><mat-icon>refresh</mat-icon> Reset</button>
-              <button class="mr-0" mat-flat-button color="primary" type="submit"><mat-icon>save</mat-icon> Save Changes</button>
+              <button class="mr-0" mat-flat-button color="primary" type="submit"><mat-icon>save</mat-icon> Save</button>
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
@@ -132,7 +130,7 @@
             </div>
             <div class="text-right mt-5 d-flex">
               <span class="spacer"></span>
-              <button mat-stroked-button type="reset"><mat-icon>refresh</mat-icon> Reset</button>
+              <button mat-stroked-button type="reset" (click)="resetNotificationForm()"><mat-icon>refresh</mat-icon> Reset</button>
               <button class="mr-0" mat-flat-button color="primary" type="submit" [disabled]="!notificationForm.valid"> Send</button>
             </div>
           </mat-card-content>

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CustomerDataPage} from '../../../../entities/customer-data-page';
 import {CustomerService} from '../../../../services/customer.service';
 import {FormControl} from '@angular/forms';
@@ -16,13 +16,11 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   templateUrl: './customer-table.component.html',
   styleUrls: ['./customer-table.component.scss']
 })
-export class CustomerTableComponent extends AbstractComponent implements OnInit{
+export class CustomerTableComponent extends AbstractComponent implements OnInit {
   customerDataPage: CustomerDataPage;
   displayedColumns: string[] = [];
   pageSize = 5;
   pageIndex = 0;
-
-
   nameField = new FormControl();
   nicField = new FormControl();
   contactField = new FormControl();
@@ -40,25 +38,25 @@ export class CustomerTableComponent extends AbstractComponent implements OnInit{
     this.refreshData();
   }
 
-  async loadData(): Promise<void>{
+  async loadData(): Promise<void> {
 
     this.updatePrivileges();
 
-    if (this.privilege.showAll){
+    if (this.privilege.showAll) {
       this.setDisplayedColumns();
 
       const pageRequest = new PageRequest();
-      pageRequest.pageIndex  = this.pageIndex;
-      pageRequest.pageSize  = this.pageSize;
+      pageRequest.pageIndex = this.pageIndex;
+      pageRequest.pageSize = this.pageSize;
 
 
       pageRequest.addSearchCriteria('name', this.nameField.value);
       pageRequest.addSearchCriteria('nic', this.nicField.value);
       pageRequest.addSearchCriteria('contact', this.contactField.value);
 
-      try{
+      try {
         this.customerDataPage = await this.customerService.getAll(pageRequest);
-      }catch (e) {
+      } catch (e) {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
@@ -73,28 +71,36 @@ export class CustomerTableComponent extends AbstractComponent implements OnInit{
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_CUSTOMER);
   }
 
-  setDisplayedColumns(): void{
-    this.displayedColumns = [ 'name', 'nic', 'contacts'];
+  setDisplayedColumns(): void {
+    this.displayedColumns = ['name', 'nic', 'contacts'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
-    if (this.privilege.update) { this.displayedColumns.push('update-col'); }
-    if (this.privilege.delete) { this.displayedColumns.push('delete-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(customer: Customer): Promise<void>{
+  async delete(customer: Customer): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: customer.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.customerService.delete(customer.id);
       this.loadData();

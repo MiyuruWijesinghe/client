@@ -1,5 +1,4 @@
-
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {Employee} from '../../../../entities/employee';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
@@ -21,7 +20,6 @@ import {DateHelper} from '../../../../shared/date-helper';
 import {Branch} from '../../../../entities/branch';
 import {BranchService} from '../../../../services/branch.service';
 import {PageRequest} from '../../../../shared/page-request';
-import {ItemDataPage} from '../../../../entities/item-data-page';
 import {BranchDataPage} from '../../../../entities/branch-data-page';
 import {User, UserDataPage} from '../../../../entities/user';
 import {NotificationService} from '../../../../services/notification.service';
@@ -34,7 +32,6 @@ import {Notification} from '../../../../entities/notification';
   styleUrls: ['./employee-form.component.scss']
 })
 export class EmployeeFormComponent extends AbstractComponent implements OnInit {
-
 
   nametitles: Nametitle[] = [];
   designations: Designation[] = [];
@@ -104,8 +101,6 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
     ]),
     photo: new FormControl(),
     branch: new FormControl(),
-
-
   });
 
   notificationForm = new FormGroup({
@@ -116,63 +111,6 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
       Validators.required
     ]),
   });
-
-  get callingnameField(): FormControl
-  {return this.form.controls.callingname as FormControl;
-  }
-  get fullnameField(): FormControl{
-    return this.form.controls.fullname as FormControl;
-  }
-  get dobirthField(): FormControl{
-    return this.form.controls.dobirth as FormControl;
-  }
-  get nicField(): FormControl{
-    return this.form.controls.nic as FormControl;
-  }
-  get mobileField(): FormControl{
-    return this.form.controls.mobile as FormControl;
-  }
-  get landField(): FormControl{
-    return this.form.controls.land as FormControl;
-  }
-  get addressField(): FormControl{
-    return this.form.controls.address as FormControl;
-  }
-  get emailField(): FormControl{
-    return this.form.controls.email as FormControl;
-  }
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-  get dorecruiteField(): FormControl{
-    return this.form.controls.dorecruite as FormControl;
-  }
-  get genderField(): FormControl{
-    return this.form.controls.gender as FormControl;
-  }
-  get civilstatusField(): FormControl{
-    return this.form.controls.civilstatus as FormControl;
-  }
-  get designationField(): FormControl{
-    return this.form.controls.designation as FormControl;
-  }
-  get nametitleField(): FormControl{
-    return this.form.controls.nametitle as FormControl;
-  }
-  get photoField(): FormControl{
-    return this.form.controls.photo as FormControl;
-  }
-  get branchField(): FormControl{
-    return this.form.controls.branch as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
 
   constructor(
     private employeeService: EmployeeService,
@@ -189,6 +127,78 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
     super();
   }
 
+  get callingnameField(): FormControl {
+    return this.form.controls.callingname as FormControl;
+  }
+
+  get fullnameField(): FormControl {
+    return this.form.controls.fullname as FormControl;
+  }
+
+  get dobirthField(): FormControl {
+    return this.form.controls.dobirth as FormControl;
+  }
+
+  get nicField(): FormControl {
+    return this.form.controls.nic as FormControl;
+  }
+
+  get mobileField(): FormControl {
+    return this.form.controls.mobile as FormControl;
+  }
+
+  get landField(): FormControl {
+    return this.form.controls.land as FormControl;
+  }
+
+  get addressField(): FormControl {
+    return this.form.controls.address as FormControl;
+  }
+
+  get emailField(): FormControl {
+    return this.form.controls.email as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get dorecruiteField(): FormControl {
+    return this.form.controls.dorecruite as FormControl;
+  }
+
+  get genderField(): FormControl {
+    return this.form.controls.gender as FormControl;
+  }
+
+  get civilstatusField(): FormControl {
+    return this.form.controls.civilstatus as FormControl;
+  }
+
+  get designationField(): FormControl {
+    return this.form.controls.designation as FormControl;
+  }
+
+  get nametitleField(): FormControl {
+    return this.form.controls.nametitle as FormControl;
+  }
+
+  get photoField(): FormControl {
+    return this.form.controls.photo as FormControl;
+  }
+
+  get branchField(): FormControl {
+    return this.form.controls.branch as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
     this.loadData();
     this.refreshData();
@@ -197,46 +207,48 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
   loadData(): any {
     this.updatePrivileges();
 
-    if (!this.privilege.add){ return; }
+    if (!this.privilege.add) {
+      return;
+    }
 
     this.genderService.getAll().then((data: Gender[]) => {
       this.genders = data;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
       this.branches = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.civilstatusService.getAll().then((data: Civilstatus[]) => {
       this.civilstatuses = data;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.designationService.getAll().then((data: Designation[]) => {
       this.designations = data;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.nametitleService.getAll().then((data: Nametitle[]) => {
       this.nametitles = data;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -253,7 +265,9 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
   async submit(): Promise<void> {
     this.photoField.markAsTouched();
     this.photoField.updateValueAndValidity();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const employee: Employee = new Employee();
     employee.callingname = this.callingnameField.value;
@@ -271,19 +285,21 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
     employee.nametitle = this.nametitleField.value;
     employee.branch = this.branchField.value;
     employee.email = (this.emailField.value === '') ? null : this.emailField.value;
-    if (this.photoField.value !== null && this.photoField.value !== []){
+    if (this.photoField.value !== null && this.photoField.value !== []) {
       employee.photo = this.photoField.value ? this.photoField.value[0] : null;
     }
 
 
-
-    try{
+    try {
       const resourceLink: ResourceLink = await this.employeeService.add(employee);
       await this.router.navigateByUrl('/employees/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -294,22 +310,26 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -317,5 +337,9 @@ export class EmployeeFormComponent extends AbstractComponent implements OnInit {
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
   }
 }

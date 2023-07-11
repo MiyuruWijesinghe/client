@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {ItemDataPage} from '../../../../entities/item-data-page';
 import {FormControl} from '@angular/forms';
@@ -14,7 +14,6 @@ import {Itemtype} from '../../../../entities/itemtype';
 import {Itemstatus} from '../../../../entities/itemstatus';
 import {ItemtypeService} from '../../../../services/itemtype.service';
 import {ItemstatusService} from '../../../../services/itemstatus.service';
-import {Designation} from '../../../../entities/designation';
 
 @Component({
   selector: 'app-item-table',
@@ -30,11 +29,9 @@ export class ItemTableComponent extends AbstractComponent implements OnInit {
   itemtypes: Itemtype[] = [];
   itemstatuses: Itemstatus[] = [];
 
-
   nameField = new FormControl();
   itemtypeField = new FormControl();
   itemstatusField = new FormControl();
-
 
   constructor(
     private itemService: ItemService,
@@ -42,7 +39,6 @@ export class ItemTableComponent extends AbstractComponent implements OnInit {
     private snackBar: MatSnackBar,
     private itemtypeService: ItemtypeService,
     private itemstatusService: ItemstatusService,
-
   ) {
     super();
   }
@@ -52,38 +48,36 @@ export class ItemTableComponent extends AbstractComponent implements OnInit {
     this.refreshData();
   }
 
-  async loadData(): Promise<void>{
+  async loadData(): Promise<void> {
 
     this.updatePrivileges();
 
-    if (this.privilege.showAll){
+    if (this.privilege.showAll) {
       this.setDisplayedColumns();
 
       const pageRequest = new PageRequest();
-      pageRequest.pageIndex  = this.pageIndex;
-      pageRequest.pageSize  = this.pageSize;
-
-
+      pageRequest.pageIndex = this.pageIndex;
+      pageRequest.pageSize = this.pageSize;
 
       pageRequest.addSearchCriteria('name', this.nameField.value);
       pageRequest.addSearchCriteria('itemtype', this.itemtypeField.value);
       pageRequest.addSearchCriteria('itemstatus', this.itemstatusField.value);
 
-      try{
+      try {
         this.itemDataPage = await this.itemService.getAll(pageRequest);
-      }catch (e) {
+      } catch (e) {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
       this.itemstatusService.getAll().then((data: Itemstatus[]) => {
         this.itemstatuses = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
       this.itemtypeService.getAll().then((data: Itemtype[]) => {
         this.itemtypes = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -98,28 +92,36 @@ export class ItemTableComponent extends AbstractComponent implements OnInit {
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_ITEM);
   }
 
-  setDisplayedColumns(): void{
-    this.displayedColumns = [ 'name', 'itemtype', 'lastprice'];
+  setDisplayedColumns(): void {
+    this.displayedColumns = ['name', 'itemtype', 'lastprice'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
-    if (this.privilege.update) { this.displayedColumns.push('update-col'); }
-    if (this.privilege.delete) { this.displayedColumns.push('delete-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(item: Item): Promise<void>{
+  async delete(item: Item): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: item.name}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.itemService.delete(item.id);
       this.loadData();

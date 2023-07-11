@@ -35,9 +35,7 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
 
   @ViewChild(ItemBranchUpdateSubFormComponent) itembranchupdateSubForm: ItemBranchUpdateSubFormComponent;
 
-
   selectedId: number;
-
   item: Item = new Item();
   itemtypes: Itemtype[] = [];
   itemstatuses: Itemstatus[] = [];
@@ -83,43 +81,6 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
     ]),
   });
 
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
-  get itemtypeField(): FormControl{
-    return this.form.controls.itemtype as FormControl;
-  }
-
-  get itemstatusField(): FormControl{
-    return this.form.controls.itemstatus as FormControl;
-  }
-  get itemcategoryField(): FormControl{
-    return this.form.controls.itemcategory as FormControl;
-  }
-
-  get lastpriceField(): FormControl{
-    return this.form.controls.lastprice as FormControl;
-  }
-  get unitField(): FormControl{
-    return this.form.controls.unit as FormControl;
-  }
-  get itembranchesField(): FormControl{
-    return this.form.controls.itembranches as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private itemService: ItemService,
     private itemtypeService: ItemtypeService,
@@ -136,18 +97,57 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
     super();
   }
 
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get itemtypeField(): FormControl {
+    return this.form.controls.itemtype as FormControl;
+  }
+
+  get itemstatusField(): FormControl {
+    return this.form.controls.itemstatus as FormControl;
+  }
+
+  get itemcategoryField(): FormControl {
+    return this.form.controls.itemcategory as FormControl;
+  }
+
+  get lastpriceField(): FormControl {
+    return this.form.controls.lastprice as FormControl;
+  }
+
+  get unitField(): FormControl {
+    return this.form.controls.unit as FormControl;
+  }
+
+  get itembranchesField(): FormControl {
+    return this.form.controls.itembranches as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
 
     this.branchService.getAll(new PageRequest()).then((data: BranchDataPage) => {
       this.branches = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId =  + params.get('id');
-
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
 
       await this.loadData();
       this.refreshData();
@@ -157,13 +157,17 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.update){ return; }
-    if (!this.privilege.add){ return; }
+    if (!this.privilege.update) {
+      return;
+    }
+    if (!this.privilege.add) {
+      return;
+    }
 
     if (this.itemstatusField.pristine) {
       this.itemstatusService.getAll().then((data: Itemstatus[]) => {
         this.itemstatuses = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -171,7 +175,7 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
     if (this.itemcategoryField.pristine) {
       this.itemcategoryService.getAll().then((data: Itemcategory[]) => {
         this.itemcategories = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -179,7 +183,7 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
     if (this.itemtypeField.pristine) {
       this.itemtypeService.getAll().then((data: Itemtype[]) => {
         this.itemtypes = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -187,7 +191,7 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
     if (this.unitField.pristine) {
       this.unitService.getAll().then((data: Unit[]) => {
         this.units = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -197,7 +201,7 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -211,28 +215,46 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_ITEM);
   }
 
-  discardChanges(): void{
+  discardChanges(): void {
     this.itembranchupdateSubForm.resetForm();
     this.itembranchesField.markAsPristine();
     this.form.patchValue(this.item);
   }
 
-  setValues(): void{
-    if (this.nameField.pristine){ this.nameField.patchValue(this.item.name); }
-    if (this.lastpriceField.pristine){ this.lastpriceField.patchValue(this.item.lastprice); }
-    if (this.itemtypeField.pristine){ this.itemtypeField.patchValue(this.item.itemtype.id); }
-    if (this.itemstatusField.pristine){ this.itemstatusField.patchValue(this.item.itemstatus.id); }
-    if (this.itemcategoryField.pristine){ this.itemcategoryField.patchValue(this.item.itemcategory.id); }
-    if (this.unitField.pristine){ this.unitField.patchValue(this.item.unit.id); }
-    if (this.descriptionField.pristine){ this.descriptionField.patchValue(this.item.description); }
-    if (this.itembranchesField.pristine){ this.itembranchesField.patchValue(this.item.itembranchList); }
-      }
+  setValues(): void {
+    if (this.nameField.pristine) {
+      this.nameField.patchValue(this.item.name);
+    }
+    if (this.lastpriceField.pristine) {
+      this.lastpriceField.patchValue(this.item.lastprice);
+    }
+    if (this.itemtypeField.pristine) {
+      this.itemtypeField.patchValue(this.item.itemtype.id);
+    }
+    if (this.itemstatusField.pristine) {
+      this.itemstatusField.patchValue(this.item.itemstatus.id);
+    }
+    if (this.itemcategoryField.pristine) {
+      this.itemcategoryField.patchValue(this.item.itemcategory.id);
+    }
+    if (this.unitField.pristine) {
+      this.unitField.patchValue(this.item.unit.id);
+    }
+    if (this.descriptionField.pristine) {
+      this.descriptionField.patchValue(this.item.description);
+    }
+    if (this.itembranchesField.pristine) {
+      this.itembranchesField.patchValue(this.item.itembranchList);
+    }
+  }
 
   async submit(): Promise<void> {
 
     this.itembranchupdateSubForm.resetForm();
     this.itembranchesField.markAsDirty();
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
 
     const newItem: Item = new Item();
     newItem.name = this.nameField.value;
@@ -244,13 +266,13 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
     newItem.unit = this.unitField.value;
     newItem.itembranchList = this.itembranchesField.value;
 
-
-    try{
+    try {
       const resourceLink: ResourceLink = await this.itemService.update(this.item.id, newItem);
       await this.router.navigateByUrl('/items/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 403:
           this.snackBar.open(e.error.message, null, {duration: 2000});
           setTimeout(() => {
@@ -267,22 +289,26 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -290,5 +316,9 @@ export class ItemUpdateFormComponent extends AbstractComponent implements OnInit
           this.snackBar.open('Something is wrong', null, {duration: 2000});
       }
     }
+  }
+
+  resetNotificationForm(): void {
+    this.notificationForm.reset({ value: '', disabled: false }, { emitEvent: false });
   }
 }

@@ -34,22 +34,26 @@ export class MyAllNotificationComponent extends AbstractComponent implements OnI
 
   async loadData(): Promise<any> {
     const pageRequest = new PageRequest();
-    pageRequest.pageIndex  = this.pageIndex;
-    pageRequest.pageSize  = this.pageSize;
+    pageRequest.pageIndex = this.pageIndex;
+    pageRequest.pageSize = this.pageSize;
 
     this.notificationService.getAll(pageRequest).then(async (page: NotificationDataPage) => {
       this.notificationDataPage = page;
-      for (const notification of page.content){
-        if (!notification.dodelivered){ await this.notificationService.setDelivered(notification.id); }
-        if (!notification.doread){ this.notificationService.setRead(notification.id); }
+      for (const notification of page.content) {
+        if (!notification.dodelivered) {
+          await this.notificationService.setDelivered(notification.id);
+        }
+        if (!notification.doread) {
+          this.notificationService.setRead(notification.id);
+        }
       }
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
@@ -58,14 +62,16 @@ export class MyAllNotificationComponent extends AbstractComponent implements OnI
   updatePrivileges(): any {
   }
 
-  async delete(notification: Notification): Promise<void>{
+  async delete(notification: Notification): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: null}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.notificationService.delete(notification.id);
       this.loadData();

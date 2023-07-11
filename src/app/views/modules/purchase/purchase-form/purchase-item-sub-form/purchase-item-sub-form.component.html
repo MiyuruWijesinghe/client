@@ -2,19 +2,17 @@
   <div class="row">
     <div class="col-md-9">
       <div class="sub-form-table-container" style="height: 240px;">
-        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No allowances to show</div>
+        <div *ngIf="dataList.length === 0" class="sub-form-table-placeholder" style="padding-top: 90px">No records to show</div>
         <div *ngIf="dataList.length > 0" >
-
           <table class="w-100 mat-table">
             <thead>
             <tr>
               <th>Item</th>
-              <th>QTY</th>
+              <th>Quantity</th>
               <th>Unit Price</th>
               <th>Batch NO</th>
               <th>Do manufactured</th>
               <th>Do expired</th>
-
               <th></th>
               <th></th>
             </tr>
@@ -27,7 +25,6 @@
               <td>{{dataItem.batchno}}</td>
               <td>{{dataItem.domanufactured}}</td>
               <td>{{dataItem.doexpired}}</td>
-
               <td class="btn-col">
                 <button [disabled]="disabled" type="button" (click)="removeData(i, dataItem)" class="mat-btn-sm" mat-flat-button color="warn">
                   <mat-icon>delete</mat-icon> Delete
@@ -44,13 +41,10 @@
         </div>
       </div>
     </div>
-      </div>
+  </div>
   <div class="row">
-
     <div class="col-md-9">
       <form [formGroup]="form" (ngSubmit)="addData()">
-
-
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Item</mat-label>
           <mat-select  formControlName="item">
@@ -63,11 +57,11 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="w-100 mb-2">
-          <mat-label>QTY</mat-label>
+          <mat-label>Quantity</mat-label>
           <input matInput formControlName="qty" [required]="fieldValidations.qty.length!=0" (focus)="setValidations()">
           <mat-hint>Ex: 800</mat-hint>
           <mat-error *ngIf="qtyField.invalid">
-            <span *ngIf="qtyField.errors.required">QTY is required</span>
+            <span *ngIf="qtyField.errors.required">Quantity is required</span>
           </mat-error>
         </mat-form-field>
 
@@ -109,7 +103,6 @@
           </mat-error>
         </mat-form-field>
 
-
         <div class="text-right mt-5 d-flex">
           <span class="spacer"></span>
           <button [disabled]="disabled" (click)="resetForm()" class="mat-btn-sm" mat-stroked-button type="button"><mat-icon>refresh</mat-icon> Clear </button>
@@ -118,6 +111,5 @@
       </form>
     </div>
   </div>
-
 
 </div>

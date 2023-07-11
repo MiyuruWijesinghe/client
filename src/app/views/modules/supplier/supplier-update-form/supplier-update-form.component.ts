@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Supplier} from '../../../../entities/supplier';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -9,20 +9,17 @@ import {UsecaseList} from '../../../../usecase-list';
 import {ResourceLink} from '../../../../entities/resource-link';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {SuppliertypeService} from '../../../../services/suppliertype.service';
-import {Employee} from '../../../../entities/employee';
-import {Civilstatus} from '../../../../entities/civilstatus';
 import {Suppliertype} from '../../../../entities/suppliertype';
-import {Designation} from '../../../../entities/designation';
 import {Supplierstatus} from '../../../../entities/supplierstatus';
 import {SupplierstatusService} from '../../../../services/supplierstatus.service';
 import {Item} from '../../../../entities/item';
 import {ItemService} from '../../../../services/item.service';
 import {PageRequest} from '../../../../shared/page-request';
 import {ItemDataPage} from '../../../../entities/item-data-page';
-import {User, UserDataPage} from "../../../../entities/user";
-import {NotificationService} from "../../../../services/notification.service";
-import {UserService} from "../../../../services/user.service";
-import {Notification} from "../../../../entities/notification";
+import {User, UserDataPage} from '../../../../entities/user';
+import {NotificationService} from '../../../../services/notification.service';
+import {UserService} from '../../../../services/user.service';
+import {Notification} from '../../../../entities/notification';
 
 @Component({
   selector: 'app-supplier-update-form',
@@ -32,7 +29,6 @@ import {Notification} from "../../../../entities/notification";
 export class SupplierUpdateFormComponent extends AbstractComponent implements OnInit {
   selectedId: number;
   supplier: Supplier;
-
 
   suppliertypes: Suppliertype[] = [];
   supplierstatuses: Supplierstatus[] = [];
@@ -92,52 +88,6 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
     ]),
   });
 
-  get nameField(): FormControl{
-    return this.form.controls.name as FormControl;
-  }
-
-  get contact1Field(): FormControl{
-    return this.form.controls.contact1 as FormControl;
-  }
-
-  get contact2Field(): FormControl{
-    return this.form.controls.contact2 as FormControl;
-  }
-
-  get emailField(): FormControl{
-    return this.form.controls.email as FormControl;
-  }
-
-  get addressField(): FormControl{
-    return this.form.controls.address as FormControl;
-  }
-
-  get descriptionField(): FormControl{
-    return this.form.controls.description as FormControl;
-  }
-
-  get faxField(): FormControl{
-    return this.form.controls.fax as FormControl;
-  }
-
-  get suppliertypeField(): FormControl{
-    return this.form.controls.suppliertype as FormControl;
-  }
-  get supplierstatusField(): FormControl{
-    return this.form.controls.supplierstatus as FormControl;
-  }
-  get itemField(): FormControl{
-    return this.form.controls.item as FormControl;
-  }
-
-  get messageField(): FormControl{
-    return this.notificationForm.controls.message as FormControl;
-  }
-
-  get systemUserField(): FormControl{
-    return this.notificationForm.controls.systemUser as FormControl;
-  }
-
   constructor(
     private route: ActivatedRoute,
     private supplierService: SupplierService,
@@ -152,13 +102,61 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
     super();
   }
 
+  get nameField(): FormControl {
+    return this.form.controls.name as FormControl;
+  }
+
+  get contact1Field(): FormControl {
+    return this.form.controls.contact1 as FormControl;
+  }
+
+  get contact2Field(): FormControl {
+    return this.form.controls.contact2 as FormControl;
+  }
+
+  get emailField(): FormControl {
+    return this.form.controls.email as FormControl;
+  }
+
+  get addressField(): FormControl {
+    return this.form.controls.address as FormControl;
+  }
+
+  get descriptionField(): FormControl {
+    return this.form.controls.description as FormControl;
+  }
+
+  get faxField(): FormControl {
+    return this.form.controls.fax as FormControl;
+  }
+
+  get suppliertypeField(): FormControl {
+    return this.form.controls.suppliertype as FormControl;
+  }
+
+  get supplierstatusField(): FormControl {
+    return this.form.controls.supplierstatus as FormControl;
+  }
+
+  get itemField(): FormControl {
+    return this.form.controls.item as FormControl;
+  }
+
+  get messageField(): FormControl {
+    return this.notificationForm.controls.message as FormControl;
+  }
+
+  get systemUserField(): FormControl {
+    return this.notificationForm.controls.systemUser as FormControl;
+  }
+
   ngOnInit(): void {
-    this.route.paramMap.subscribe( async (params) => {
-      this.selectedId =  + params.get('id');
+    this.route.paramMap.subscribe(async (params) => {
+      this.selectedId = +params.get('id');
 
       this.itemService.getAll(new PageRequest()).then((data: ItemDataPage) => {
         this.items = data.content;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -170,12 +168,14 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.update){ return; }
+    if (!this.privilege.update) {
+      return;
+    }
 
     if (this.suppliertypeField.pristine) {
       this.suppliertypeService.getAll().then((data: Suppliertype[]) => {
         this.suppliertypes = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -183,7 +183,7 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
     if (this.supplierstatusField.pristine) {
       this.supplierstatusService.getAll().then((data: Supplierstatus[]) => {
         this.supplierstatuses = data;
-      }).catch( e => {
+      }).catch(e => {
         console.log(e);
         this.snackBar.open('Something is wrong', null, {duration: 2000});
       });
@@ -194,7 +194,7 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
 
     this.userService.getAll(new PageRequest()).then((data: UserDataPage) => {
       this.systemUsers = data.content;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -209,7 +209,9 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
   }
 
   async submit(): Promise<void> {
-    if (this.form.invalid) { return; }
+    if (this.form.invalid) {
+      return;
+    }
     const newSupplier: Supplier = new Supplier();
     newSupplier.name = this.nameField.value;
     newSupplier.contact1 = this.contact1Field.value;
@@ -223,14 +225,13 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
     newSupplier.itemList = this.itemField.value;
 
 
-
-
-    try{
+    try {
       const resourceLink: ResourceLink = await this.supplierService.update(this.supplier.id, newSupplier);
       await this.router.navigateByUrl('/suppliers/' + resourceLink.id);
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
+        case 401:
+          break;
         case 403:
           this.snackBar.open(e.error.message, null, {duration: 2000});
           setTimeout(() => {
@@ -247,40 +248,64 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
 
   }
 
-  discardChanges(): void{
+  discardChanges(): void {
     this.form.patchValue(this.supplier);
   }
 
-  setValues(): void{
-    if (this.nameField.pristine){ this.nameField.patchValue(this.supplier.name); }
-    if (this.contact1Field.pristine){ this.contact1Field.patchValue(this.supplier.contact1); }
-    if (this.contact2Field.pristine){ this.contact2Field.patchValue(this.supplier.contact2); }
-    if (this.emailField.pristine){ this.emailField.patchValue(this.supplier.email); }
-    if (this.faxField.pristine){ this.faxField.patchValue(this.supplier.fax); }
-    if (this.suppliertypeField.pristine){ this.suppliertypeField.patchValue(this.supplier.suppliertype); }
-    if (this.supplierstatusField.pristine){ this.supplierstatusField.patchValue(this.supplier.supplierstatus.id); }
-    if (this.addressField.pristine){ this.addressField.patchValue(this.supplier.address); }
-    if (this.descriptionField.pristine){ this.descriptionField.patchValue(this.supplier.description); }
-    if (this.itemField.pristine){ this.itemField.patchValue(this.supplier.itemList); }
+  setValues(): void {
+    if (this.nameField.pristine) {
+      this.nameField.patchValue(this.supplier.name);
+    }
+    if (this.contact1Field.pristine) {
+      this.contact1Field.patchValue(this.supplier.contact1);
+    }
+    if (this.contact2Field.pristine) {
+      this.contact2Field.patchValue(this.supplier.contact2);
+    }
+    if (this.emailField.pristine) {
+      this.emailField.patchValue(this.supplier.email);
+    }
+    if (this.faxField.pristine) {
+      this.faxField.patchValue(this.supplier.fax);
+    }
+    if (this.suppliertypeField.pristine) {
+      this.suppliertypeField.patchValue(this.supplier.suppliertype);
+    }
+    if (this.supplierstatusField.pristine) {
+      this.supplierstatusField.patchValue(this.supplier.supplierstatus.id);
+    }
+    if (this.addressField.pristine) {
+      this.addressField.patchValue(this.supplier.address);
+    }
+    if (this.descriptionField.pristine) {
+      this.descriptionField.patchValue(this.supplier.description);
+    }
+    if (this.itemField.pristine) {
+      this.itemField.patchValue(this.supplier.itemList);
+    }
   }
 
   async sendMessage(): Promise<void> {
-    if (this.notificationForm.invalid) { return; }
+    if (this.notificationForm.invalid) {
+      return;
+    }
     const notification: Notification = new Notification();
     notification.message = this.messageField.value;
-    try{
+    try {
       await this.notificationService.add(this.systemUserField.value, notification);
       console.log(notification);
-      this.notificationForm.reset();
       this.snackBar.open('Message sent', null, {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom'
       });
-    }catch (e) {
+    } catch (e) {
       switch (e.status) {
-        case 401: break;
-        case 403: this.snackBar.open(e.error.message, null, {duration: 2000}); break;
+        case 401:
+          break;
+        case 403:
+          this.snackBar.open(e.error.message, null, {duration: 2000});
+          break;
         case 400:
           this.snackBar.open('Validation Error', null, {duration: 2000});
           break;
@@ -290,4 +315,7 @@ export class SupplierUpdateFormComponent extends AbstractComponent implements On
     }
   }
 
+  resetNotificationForm(): void {
+    this.notificationForm.reset({value: '', disabled: false}, {emitEvent: false});
+  }
 }

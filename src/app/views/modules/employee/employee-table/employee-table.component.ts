@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../../../../shared/abstract-component';
 import {FormControl} from '@angular/forms';
 import {EmployeeDataPage} from '../../../../entities/employee-data-page';
@@ -32,10 +32,6 @@ export class EmployeeTableComponent extends AbstractComponent implements OnInit 
   mobileField = new FormControl();
   designationField = new FormControl();
 
-  get thumbnailUrl(): string{
-    return ApiManager.getURL('files/thumbnail/');
-  }
-
   constructor(
     private employeeService: EmployeeService,
     private dialog: MatDialog,
@@ -43,6 +39,10 @@ export class EmployeeTableComponent extends AbstractComponent implements OnInit 
     private designationService: DesignationService
   ) {
     super();
+  }
+
+  get thumbnailUrl(): string {
+    return ApiManager.getURL('files/thumbnail/');
   }
 
   async ngOnInit(): Promise<void> {
@@ -53,13 +53,15 @@ export class EmployeeTableComponent extends AbstractComponent implements OnInit 
   async loadData(): Promise<any> {
     this.updatePrivileges();
 
-    if (!this.privilege.showAll) { return; }
+    if (!this.privilege.showAll) {
+      return;
+    }
 
     this.setDisplayedColumns();
 
     const pageRequest = new PageRequest();
-    pageRequest.pageIndex  = this.pageIndex;
-    pageRequest.pageSize  = this.pageSize;
+    pageRequest.pageIndex = this.pageIndex;
+    pageRequest.pageSize = this.pageSize;
 
     pageRequest.addSearchCriteria('name', this.nameField.value);
     pageRequest.addSearchCriteria('nic', this.nicField.value);
@@ -68,14 +70,14 @@ export class EmployeeTableComponent extends AbstractComponent implements OnInit 
 
     this.employeeService.getAll(pageRequest).then((page: EmployeeDataPage) => {
       this.employeeDataPage = page;
-    }).catch( e => {
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
 
     this.designationService.getAll().then((data: Designation[]) => {
-       this.designations = data;
-    }).catch( e => {
+      this.designations = data;
+    }).catch(e => {
       console.log(e);
       this.snackBar.open('Something is wrong', null, {duration: 2000});
     });
@@ -89,28 +91,36 @@ export class EmployeeTableComponent extends AbstractComponent implements OnInit 
     this.privilege.update = LoggedUser.can(UsecaseList.UPDATE_EMPLOYEE);
   }
 
-  setDisplayedColumns(): void{
+  setDisplayedColumns(): void {
     this.displayedColumns = ['photo', 'code', 'callingname', 'designation', 'nic', 'mobile'];
 
-    if (this.privilege.showOne) { this.displayedColumns.push('more-col'); }
-    if (this.privilege.update) { this.displayedColumns.push('update-col'); }
-    if (this.privilege.delete) { this.displayedColumns.push('delete-col'); }
+    if (this.privilege.showOne) {
+      this.displayedColumns.push('more-col');
+    }
+    if (this.privilege.update) {
+      this.displayedColumns.push('update-col');
+    }
+    if (this.privilege.delete) {
+      this.displayedColumns.push('delete-col');
+    }
   }
 
-  paginate(e): void{
+  paginate(e): void {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
     this.loadData();
   }
 
-  async delete(employee: Employee): Promise<void>{
+  async delete(employee: Employee): Promise<void> {
     const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
       width: '300px',
       data: {message: employee.callingname}
     });
 
-    dialogRef.afterClosed().subscribe( async result => {
-      if (!result) { return; }
+    dialogRef.afterClosed().subscribe(async result => {
+      if (!result) {
+        return;
+      }
 
       await this.employeeService.delete(employee.id);
       this.loadData();
